@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Hackney Hackers</title>
-<meta name="description" content="Hackney Hackers Ltd is a small software studio in Hackney, London. Maker of Pause &amp; Pray for Android.">
+<meta name="description" content="Hackney Hackers Ltd is a small software studio in Hackney, London. Maker of Pause &amp; Pray, FutureYou and World of Pomos.">
 <style>
   :root {
     --paper: #FAFAF7; --ink: #17201F; --muted: #5C6663;
@@ -30,6 +30,8 @@
   .mark { flex: none; width: 64px; height: 64px; border-radius: 16px;
           background: var(--teal); display: grid; place-items: center; }
   .mark svg { width: 38px; height: 38px; }
+  .mark img { image-rendering: pixelated; }
+  .products { display: flex; flex-direction: column; gap: 2.4rem; }
   .product h3 { margin: 0.1rem 0 0.5rem; font-size: 1.25rem; }
   .product p { margin: 0 0 0.6rem; color: var(--muted); }
   .status { display: inline-block; font-size: 0.85rem; font-weight: 600;
@@ -72,6 +74,34 @@
         phone; there are no accounts, no ads and no tracking.</p>
         <p><span class="status">Coming to Google Play</span></p>
         <p><a href="/privacy/">Privacy policy</a></p>
+      </div>
+    </div>
+
+    <div class="product" style="margin-top: 2.4rem">
+      <div class="mark" style="background: #7B39ED" aria-hidden="true">
+        <img src="/assets/worldofpomos.png" alt="" style="width: 34px; height: auto">
+      </div>
+      <div>
+        <h3>World of Pomos</h3>
+        <p>A pomodoro timer where focus is an adventure. Each session you
+        finish raises your Pomo companion, levels up your Searcher and
+        opens a little more of the world's lore — studying, with a
+        creature cheering you on.</p>
+        <p><span class="status">Play it in your browser</span></p>
+        <p><a href="https://pomo-2024.web.app/">pomo-2024.web.app</a></p>
+      </div>
+    </div>
+
+    <div class="product" style="margin-top: 2.4rem">
+      <div class="mark" style="background: #1B1730" aria-hidden="true">
+        <img src="/assets/futureyou.png" alt="" style="width: 42px; height: auto">
+      </div>
+      <div>
+        <h3>FutureYou</h3>
+        <p>An iPhone app that turns getting fit into a retro adventure:
+        an AI coach lays out your training roadmap, pixel by pixel, and
+        shows you the future you it is leading you toward.</p>
+        <p><span class="status">In development</span></p>
       </div>
     </div>
   </section>
