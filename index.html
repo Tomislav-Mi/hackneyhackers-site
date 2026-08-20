@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hackney Hackers</title>
+<meta name="description" content="Hackney Hackers Ltd is a small software studio in Hackney, London. Maker of Pause &amp; Pray for Android.">
+<style>
+  :root {
+    --paper: #FAFAF7; --ink: #17201F; --muted: #5C6663;
+    --teal: #0D3B3A; --cream: #F7F3EB; --line: #E4E1D8;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--paper); color: var(--ink);
+    font: 18px/1.65 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+      Helvetica, Arial, sans-serif;
+  }
+  main { max-width: 41rem; margin: 0 auto; padding: 0 1.25rem; }
+  header { padding: 2.2rem 0 0; }
+  .wordmark { font-weight: 700; letter-spacing: 0.02em; color: var(--teal); }
+  .hero { padding: 4.5rem 0 3.5rem; border-bottom: 1px solid var(--line); }
+  h1 { font-size: 2.3rem; line-height: 1.2; margin: 0 0 0.9rem;
+       letter-spacing: -0.01em; }
+  .hero p { color: var(--muted); max-width: 34rem; margin: 0; }
+  section { padding: 3rem 0; border-bottom: 1px solid var(--line); }
+  h2 { font-size: 0.95rem; text-transform: uppercase; letter-spacing: 0.12em;
+       color: var(--muted); font-weight: 600; margin: 0 0 1.6rem; }
+  .product { display: flex; gap: 1.3rem; align-items: flex-start; }
+  .mark { flex: none; width: 64px; height: 64px; border-radius: 16px;
+          background: var(--teal); display: grid; place-items: center; }
+  .mark svg { width: 38px; height: 38px; }
+  .product h3 { margin: 0.1rem 0 0.5rem; font-size: 1.25rem; }
+  .product p { margin: 0 0 0.6rem; color: var(--muted); }
+  .status { display: inline-block; font-size: 0.85rem; font-weight: 600;
+            color: var(--teal); background: #E7EEEC; border-radius: 999px;
+            padding: 0.15rem 0.75rem; }
+  a { color: var(--teal); }
+  .contact p { margin: 0; }
+  footer { padding: 2.2rem 0 3.5rem; color: var(--muted); font-size: 0.85rem;
+           line-height: 1.6; }
+  @media (max-width: 480px) {
+    h1 { font-size: 1.8rem; }
+    .product { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+<main>
+  <header><span class="wordmark">Hackney Hackers</span></header>
+
+  <div class="hero">
+    <h1>A small software studio in Hackney, London.</h1>
+    <p>We build careful, useful apps — software that respects the person
+    holding the phone.</p>
+  </div>
+
+  <section>
+    <h2>What we make</h2>
+    <div class="product">
+      <div class="mark" aria-hidden="true">
+        <svg viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
+          <path fill="#F7F3EB" d="M235.32,180l-36.24,-36.25L162.62,23.46A21.76,21.76,0,0,0,128,12.93,21.76,21.76,0,0,0,93.38,23.46L56.92,143.76,20.68,180a16,16,0,0,0,0,22.62l32.69,32.69a16,16,0,0,0,22.63,0L124.28,187a40.68,40.68,0,0,0,3.72,-4.29,40.68,40.68,0,0,0,3.72,4.29L180,235.32a16,16,0,0,0,22.63,0l32.69,-32.69A16,16,0,0,0,235.32,180ZM120,158.75a23.85,23.85,0,0,1,-7,17L88.68,200,56,167.32l13.65,-13.66a8,8,0,0,0,2,-3.34l37,-122.22A5.78,5.78,0,0,1,120,29.78Zm47.44,41.38L143,175.72a23.85,23.85,0,0,1,-7,-17v-129a5.78,5.78,0,0,1,11.31,-1.68l37,122.22a8,8,0,0,0,2,3.34l14.49,14.49Z"/>
+        </svg>
+      </div>
+      <div>
+        <h3>Pause &amp; Pray</h3>
+        <p>An Android app for Christians who want their phone to interrupt
+        them less. Choose the apps that pull at you, and each time one
+        opens, Pause &amp; Pray first offers a short prayer or a verse of
+        scripture — then steps out of the way. Everything stays on the
+        phone; there are no accounts, no ads and no tracking.</p>
+        <p><span class="status">Coming to Google Play</span></p>
+        <p><a href="https://tomislav-mi.github.io/pause-and-pray-privacy/">Privacy policy</a></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="contact">
+    <h2>Contact</h2>
+    <p><a href="mailto:support@hackneyhackers.com">support@hackneyhackers.com</a></p>
+  </section>
+
+  <footer>
+    Hackney Hackers Ltd is registered in England and Wales,
+    company&nbsp;no.&nbsp;17350468.<br>
+    Registered office: 1F Manley Court, London&nbsp;N16&nbsp;0PB.
+  </footer>
+</main>
+</body>
+</html>
