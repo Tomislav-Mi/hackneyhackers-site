@@ -174,13 +174,23 @@
  * to send one string would be the heaviest thing on the site by an order of
  * magnitude.
  *
- * The API key below is not a secret. Firebase web keys identify the project;
- * they authorise nothing on their own. What actually guards the collection is
- * the security rule (`firestore.rules` in the pomo repo), which allows an
- * unauthenticated create only when the payload is exactly these four fields,
- * the address looks like an address, `status` is "pending", and `createdAt`
- * is the server's own clock. Reads and deletes are closed, so the list cannot
- * be enumerated or scraped from here.
+ * The API key below is not a secret, and scanners will flag it anyway — see
+ * SECURITY.md, which exists so nobody has to work this out twice. Firebase
+ * web keys identify the project; they authorise nothing on their own, and
+ * this same key is served in the World of Pomos app bundle.
+ *
+ * What actually guards the collection is the security rule (`firestore.rules`
+ * in the pomo repo), which allows an unauthenticated create only when the
+ * payload is exactly these four fields, the address looks like an address,
+ * `status` is "pending", and `createdAt` is the server's own clock. Reads and
+ * deletes are closed, so the list cannot be enumerated or scraped from here.
+ *
+ * The key is restricted to an allowlist of APIs and of HTTP referrers, but do
+ * not read the referrer list as protection for *this* request: Cloud
+ * Firestore does not enforce referrer restrictions. It reaches Firestore from
+ * any origin and is judged by the rule. The restriction earns its keep on
+ * Identity Toolkit, which does enforce it — so the key cannot be lifted from
+ * this page and used to drive Firebase Auth from somewhere else.
  *
  * `setToServerValue: REQUEST_TIME` is what satisfies that last clause — it is
  * the REST spelling of the SDK's `serverTimestamp()`, and the rule compares
