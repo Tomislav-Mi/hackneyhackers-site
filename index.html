@@ -38,33 +38,6 @@
             color: var(--teal); background: #E7EEEC; border-radius: 999px;
             padding: 0.15rem 0.75rem; }
   a { color: var(--teal); }
-  .waitlist { margin: 1rem 0 0; }
-  .waitlist-row { display: flex; gap: 0.5rem; flex-wrap: wrap; }
-  .waitlist input[type="email"] {
-    flex: 1 1 14rem; min-width: 0; font: inherit; font-size: 0.95rem;
-    color: var(--ink); background: #fff; border: 1px solid var(--line);
-    border-radius: 8px; padding: 0.55rem 0.75rem;
-  }
-  .waitlist input[type="email"]::placeholder { color: #9AA3A0; }
-  .waitlist input[type="email"]:focus-visible,
-  .waitlist button:focus-visible { outline: 2px solid var(--teal);
-                                   outline-offset: 2px; }
-  .waitlist button {
-    flex: none; font: inherit; font-size: 0.95rem; font-weight: 600;
-    color: var(--cream); background: var(--teal); border: 1px solid var(--teal);
-    border-radius: 8px; padding: 0.55rem 1rem; cursor: pointer;
-  }
-  .waitlist button:hover { background: #0A2E2D; }
-  .waitlist button[disabled] { opacity: 0.55; cursor: default; }
-  .waitlist-note { margin: 0.6rem 0 0; font-size: 0.85rem; color: var(--muted); }
-  .waitlist-note[data-state="error"] { color: #8C2F22; }
-  .waitlist-note[data-state="success"] { color: var(--teal); font-weight: 600; }
-  /* Off-screen, not display:none — a bot fills it, a screen reader skips it. */
-  .hp { position: absolute; left: -9999px; width: 1px; height: 1px;
-        overflow: hidden; }
-  .visually-hidden { position: absolute; width: 1px; height: 1px; margin: -1px;
-    padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap;
-    border: 0; }
   .contact p { margin: 0; }
   footer { padding: 2.2rem 0 3.5rem; color: var(--muted); font-size: 0.85rem;
            line-height: 1.6; }
@@ -138,26 +111,7 @@
         lost. Only the treasure is.</p>
         <p><span class="status">In development</span></p>
 
-        <form class="waitlist" id="pomos-waitlist" novalidate>
-          <label class="visually-hidden" for="pomos-email">
-            Email address for the World of Pomos waitlist
-          </label>
-          <div class="waitlist-row">
-            <input id="pomos-email" name="email" type="email" inputmode="email"
-                   autocomplete="email" placeholder="you@example.com"
-                   spellcheck="false" required>
-            <button type="submit">Join the waitlist</button>
-          </div>
-          <p class="hp" aria-hidden="true">
-            <label>Leave this field empty
-              <input type="text" name="company" tabindex="-1" autocomplete="off">
-            </label>
-          </p>
-          <p class="waitlist-note" id="pomos-waitlist-note"
-             role="status" aria-live="polite">
-            I will write once, when it opens. Nothing else, ever.
-          </p>
-        </form>
+        <p><a href="/world-of-pomos/">Join the waitlist</a></p>
       </div>
     </div>
 
@@ -187,134 +141,5 @@
   </footer>
 </main>
 
-<script>
-/*
- * World of Pomos waitlist.
- *
- * Writes straight to the Cloud Firestore `waitlist` collection over the REST
- * API — no SDK, because pulling ~100KB of Firebase JS onto a page this small
- * to send one string would be the heaviest thing on the site by an order of
- * magnitude.
- *
- * The API key below is not a secret, and scanners will flag it anyway — see
- * SECURITY.md, which exists so nobody has to work this out twice. Firebase
- * web keys identify the project; they authorise nothing on their own, and
- * this same key is served in the World of Pomos app bundle.
- *
- * What actually guards the collection is the security rule (`firestore.rules`
- * in the pomo repo), which allows an unauthenticated create only when the
- * payload is exactly these four fields, the address looks like an address,
- * `status` is "pending", and `createdAt` is the server's own clock. Reads and
- * deletes are closed, so the list cannot be enumerated or scraped from here.
- *
- * The key is restricted to an allowlist of APIs and of HTTP referrers, but do
- * not read the referrer list as protection for *this* request: Cloud
- * Firestore does not enforce referrer restrictions. It reaches Firestore from
- * any origin and is judged by the rule. The restriction earns its keep on
- * Identity Toolkit, which does enforce it — so the key cannot be lifted from
- * this page and used to drive Firebase Auth from somewhere else.
- *
- * `setToServerValue: REQUEST_TIME` is what satisfies that last clause — it is
- * the REST spelling of the SDK's `serverTimestamp()`, and the rule compares
- * against `request.time`, so a client-chosen date is rejected.
- *
- * The document id is `encodeURIComponent(email)`, matching `joinWaitlist` in
- * the app, so the same person signing up in both places is one row and not
- * two, and signing up twice is idempotent rather than an error.
- */
-(function () {
-  "use strict";
-
-  var PROJECT = "pomo-2024";
-  var API_KEY = "AIzaSyAYZg9JRFqCfbBIXxzqbz57VX4w_Ov6r7Y";
-  var ENDPOINT =
-    "https://firestore.googleapis.com/v1/projects/" + PROJECT +
-    "/databases/(default)/documents:commit?key=" + API_KEY;
-  var DOC_BASE =
-    "projects/" + PROJECT + "/databases/(default)/documents/waitlist/";
-
-  // Deliberately the same shape the security rule enforces. Catching it here
-  // turns a silent PERMISSION_DENIED into a sentence the visitor can act on.
-  var LOOKS_LIKE_EMAIL = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
-
-  var form = document.getElementById("pomos-waitlist");
-  var field = document.getElementById("pomos-email");
-  var note = document.getElementById("pomos-waitlist-note");
-  var button = form && form.querySelector("button");
-  if (!form || !field || !note || !button) return;
-
-  var RESTING_NOTE = note.textContent;
-
-  function say(text, state) {
-    note.textContent = text;
-    if (state) note.setAttribute("data-state", state);
-    else note.removeAttribute("data-state");
-  }
-
-  form.addEventListener("submit", function (event) {
-    event.preventDefault();
-
-    // The honeypot. A person never sees this field, so anything in it came
-    // from something filling the form blindly. Answer as though it worked —
-    // telling a bot why it failed only helps it try again.
-    if (form.elements.company && form.elements.company.value) {
-      say("Thank you — you are on the list.", "success");
-      return;
-    }
-
-    var email = field.value.trim().toLowerCase();
-    if (!LOOKS_LIKE_EMAIL.test(email)) {
-      say("That does not look like an email address — check it and try again.", "error");
-      field.focus();
-      return;
-    }
-
-    button.disabled = true;
-    field.readOnly = true;
-    say("Adding you…");
-
-    fetch(ENDPOINT, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        writes: [{
-          update: {
-            name: DOC_BASE + encodeURIComponent(email),
-            fields: {
-              email: { stringValue: email },
-              source: { stringValue: "hackneyhackers" },
-              status: { stringValue: "pending" }
-            }
-          },
-          updateTransforms: [
-            { fieldPath: "createdAt", setToServerValue: "REQUEST_TIME" }
-          ]
-        }]
-      })
-    })
-      .then(function (response) {
-        if (!response.ok) throw new Error("HTTP " + response.status);
-        form.reset();
-        field.readOnly = false;
-        button.disabled = true;
-        say("Thank you — you are on the list.", "success");
-      })
-      .catch(function () {
-        button.disabled = false;
-        field.readOnly = false;
-        say(
-          "That did not save. Try again in a moment, or email " +
-          "support@hackneyhackers.com and I will add you by hand.",
-          "error"
-        );
-      });
-  });
-
-  // Typing after an error clears it, so the message never contradicts the box.
-  field.addEventListener("input", function () {
-    if (note.getAttribute("data-state") === "error") say(RESTING_NOTE);
-  });
-})();
-</script>
 </body>
 </html>
