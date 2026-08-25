@@ -15,7 +15,7 @@ If you are reporting something that affects people using one of our apps
 rather than this site, say so; those live in other repositories and we will
 route it.
 
-## The Google API key in `index.html`
+## The Google API key in `world-of-pomos/index.html`
 
 Automated scanners flag this, so it is worth writing down once.
 
@@ -54,7 +54,7 @@ and used to drive Firebase Auth from elsewhere.
 ### What is not
 
 - The presence of the key in this repository or in the page source
-- A scanner reporting `google_api_key` against `index.html`
+- A scanner reporting `google_api_key` against `world-of-pomos/index.html`
 
 Both are expected. If you have found a way to make the key do something the
 rules do not permit, though, that is very much worth an email.
