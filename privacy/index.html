@@ -19,11 +19,14 @@
 <body>
 <main>
 <h1>Privacy Policy — Pause &amp; Pray</h1>
-<p><strong>Effective date: August 20, 2026</strong></p>
+<p><strong>Effective date: August 26, 2026</strong></p>
 <p>Pause &amp; Pray is an Android app that invites you to pray before a distracting app opens. This policy explains, in plain words, what the app does and does not do with information. The short version: <strong>your data stays on your phone. We run no servers, we have no accounts, and we cannot see anything you do in the app.</strong></p>
 <h2>The accessibility service</h2>
 <p>The app lock works through an Android accessibility service. When you switch apps, Android tells the service <strong>the technical name of the app now on screen</strong> (for example, <code>com.instagram.android</code>) — nothing more.</p>
-<ul><li>The service compares that name, on your phone, against the list of apps you chose to lock. If it matches, the prayer screen opens.</li><li>It reads <strong>no screen content, no text, no messages, no passwords and no screenshots</strong> — only the app&#x27;s package name.</li><li>The name is used in the moment and is not kept afterwards. It is never sent anywhere. There is no &quot;anywhere&quot;: the app has no server.</li></ul>
+<ul><li>The service compares that name, on your phone, against the list of apps you chose to lock. If it matches, the prayer screen opens.</li><li>It reads <strong>no screen content, no text, no messages, no passwords and no screenshots</strong> — only the app&#x27;s package name.</li><li>The name is never sent anywhere. There is no &quot;anywhere&quot;: the app has no server.</li></ul>
+<p>So that one prayer covers one visit, the service also holds two things in its memory while it is running: <strong>the name of the app you are in right now</strong> — a single name, replaced when you move to another app and dropped when you reach the home screen or the screen goes dark, never a list and never a history of where you have been — and <strong>a note that you have already prayed for an app</strong>, which expires on its own, so that opening a keyboard, a photo picker or a permission prompt inside that app does not ask you to pray a second time.</p>
+<p>To tell &quot;you switched to another app&quot; apart from &quot;a keyboard opened on top of the app you were already in&quot;, the service asks Android which of your installed apps are launchers, which are keyboards, and which have a home-screen icon. Those lists describe the apps on your phone, not you, and they are worked out afresh each time the service starts.</p>
+<p><strong>None of it is written to storage and none of it leaves the phone.</strong> It lives in the running app&#x27;s memory and is gone when the service stops.</p>
 <p>You turn this service on yourself in Android&#x27;s accessibility settings, after the app explains it, and you can turn it off there at any time.</p>
 <h2>What the app stores on your phone</h2>
 <p>Everything below lives only in the app&#x27;s private storage on your device. We have no copy and no way to read it.</p>
