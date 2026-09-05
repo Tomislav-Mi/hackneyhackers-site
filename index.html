@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Hackney Hackers</title>
-<meta name="description" content="Hackney Hackers Ltd is a one-person software studio in Hackney, London. Tomi makes Pause &amp; Pray, Pause &amp; Prose, FutureYou and World of Pomos.">
+<meta name="description" content="Hackney Hackers Ltd is a one-person software studio in Hackney, London. Tomi makes Pause &amp; Prose, Unwind, I deserve, World of Pomos and FutureYou.">
 <style>
   :root {
     --paper: #FAFAF7; --ink: #17201F; --muted: #5C6663;
@@ -31,6 +31,9 @@
           background: var(--teal); display: grid; place-items: center; }
   .mark svg { width: 38px; height: 38px; }
   .mark img { image-rendering: pixelated; }
+  .mark.art { background: none; overflow: hidden; }
+  .mark.art img { width: 100%; height: 100%; display: block;
+                  image-rendering: auto; }
   .products { display: flex; flex-direction: column; gap: 2.4rem; }
   .product h3 { margin: 0.1rem 0 0.5rem; font-size: 1.25rem; }
   .product p { margin: 0 0 0.6rem; color: var(--muted); }
@@ -60,24 +63,6 @@
   <section>
     <h2>What I make</h2>
     <div class="product">
-      <div class="mark" aria-hidden="true">
-        <svg viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
-          <path fill="#F7F3EB" d="M235.32,180l-36.24,-36.25L162.62,23.46A21.76,21.76,0,0,0,128,12.93,21.76,21.76,0,0,0,93.38,23.46L56.92,143.76,20.68,180a16,16,0,0,0,0,22.62l32.69,32.69a16,16,0,0,0,22.63,0L124.28,187a40.68,40.68,0,0,0,3.72,-4.29,40.68,40.68,0,0,0,3.72,4.29L180,235.32a16,16,0,0,0,22.63,0l32.69,-32.69A16,16,0,0,0,235.32,180ZM120,158.75a23.85,23.85,0,0,1,-7,17L88.68,200,56,167.32l13.65,-13.66a8,8,0,0,0,2,-3.34l37,-122.22A5.78,5.78,0,0,1,120,29.78Zm47.44,41.38L143,175.72a23.85,23.85,0,0,1,-7,-17v-129a5.78,5.78,0,0,1,11.31,-1.68l37,122.22a8,8,0,0,0,2,3.34l14.49,14.49Z"/>
-        </svg>
-      </div>
-      <div>
-        <h3>Pause &amp; Pray</h3>
-        <p>An Android app for Christians who want their phone to interrupt
-        them less. Choose the apps that pull at you, and each time one
-        opens, Pause &amp; Pray first offers a short prayer or a verse of
-        scripture — then steps out of the way. Everything stays on the
-        phone; there are no accounts, no ads and no tracking.</p>
-        <p><span class="status">Coming to Google Play</span></p>
-        <p><a href="/privacy/">Privacy policy</a></p>
-      </div>
-    </div>
-
-    <div class="product" style="margin-top: 2.4rem">
       <div class="mark" style="background: #16264A" aria-hidden="true">
         <svg viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
           <path fill="#F7F3EB" d="M120,78 C104,64 76,56 46,56 C38,56 30,57 24,58 L24,180 C30,179 38,178 46,178 C76,178 104,186 120,200 Z M136,78 C152,64 180,56 210,56 C218,56 226,57 232,58 L232,180 C226,179 218,178 210,178 C180,178 152,186 136,200 Z"/>
@@ -85,7 +70,7 @@
       </div>
       <div>
         <h3>Pause &amp; Prose</h3>
-        <p>The same idea, for people who mean to read more than they do.
+        <p>An Android app for people who mean to read more than they do.
         Choose the apps that pull at you, and each time one opens, Pause
         &amp; Prose first offers one great line of writing — Austen,
         Dickinson, Marcus Aurelius, Wilde — then steps out of the way.
@@ -94,6 +79,40 @@
         signal at all.</p>
         <p><span class="status">Coming to Google Play</span></p>
         <p><a href="/prose-privacy/">Privacy policy</a></p>
+      </div>
+    </div>
+
+    <div class="product" style="margin-top: 2.4rem">
+      <div class="mark art" aria-hidden="true">
+        <img src="/assets/unwind.svg" alt="">
+      </div>
+      <div>
+        <h3>Unwind</h3>
+        <p>An Android app that puts something to draw between you and the
+        app you reached for. Choose the apps that pull at you, and each
+        time one opens, Unwind lays a labyrinth over it to trace with a
+        finger. Finish the path and it asks one question: leave, and keep
+        the walk — or open the app, and forgo it. The walks you keep tile
+        a wall you can scroll back through. Every path is drawn on the
+        phone, so no two interruptions look alike.</p>
+        <p><span class="status">In development</span></p>
+      </div>
+    </div>
+
+    <div class="product" style="margin-top: 2.4rem">
+      <div class="mark art" aria-hidden="true">
+        <img src="/assets/ideserve.svg" alt="">
+      </div>
+      <div>
+        <h3>I deserve</h3>
+        <p>An Android app for the moment you pick the phone up without
+        deciding to. Choose the apps that pull at you, and each time one
+        opens — every time, or roughly one in three — I deserve puts a
+        single line in front of you: rest is allowed, there is no rush,
+        you did the hard part. Every line is built into the app, so it is
+        on the screen the instant the screen is, and nothing is fetched
+        from anywhere.</p>
+        <p><span class="status">In development</span></p>
       </div>
     </div>
 
