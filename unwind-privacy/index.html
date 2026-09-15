@@ -23,7 +23,7 @@
 <body>
 <main>
 <h1>Privacy Policy — Unwind</h1>
-<p><strong>Effective date: September 14, 2026</strong></p>
+<p><strong>Effective date: September 15, 2026</strong></p>
 <p>Unwind is an Android app that asks you to trace a path with your finger before a distracting app opens. This policy explains, in plain words, what the app does and does not do with information. The short version: <strong>your data stays on your phone. Unwind has no server, no account and no code that opens a network connection, so nothing it records about you is sent anywhere.</strong></p>
 <h2>The accessibility service</h2>
 <p>The app lock works through an Android accessibility service. When you switch apps, Android tells the service <strong>the technical name of the app now on screen</strong> (for example, <code>com.instagram.android</code>) — nothing more.</p>
@@ -54,7 +54,9 @@
 <ul><li><strong>Accessibility service</strong> — described above; the app lock depends on it.</li><li><strong>Vibrate</strong> — the trace answers your fingertip with small taps.</li><li><strong>Billing</strong> — lets Google Play handle the one-time purchase.</li></ul>
 <p>And three that arrive inside the libraries the app is built on. Android merges those into the finished app as though it had asked for them itself, so they are the app&#x27;s permissions too and are listed here:</p>
 <ul><li><strong>Internet</strong> and <strong>View network connections</strong> — from Google Play&#x27;s billing library, as described above. No code in Unwind uses either.</li><li><strong>A private receiver permission</strong>, named after the app itself, created by an Android support library so that one of Unwind&#x27;s own internal broadcasts cannot be reached by other apps. It grants nothing to anyone.</li></ul>
-<p>That is the whole list. It is checked against the finished app on every release build rather than written here from memory, so this section cannot quietly fall out of date.</p>
+<p>And one that Google Play adds to the copy it delivers:</p>
+<ul><li><strong>Check licence</strong> (<code>com.android.vending.CHECK_LICENSE</code>) — part of Google Play&#x27;s automatic protection: a check, made through the Play Store app, that the copy on your phone was installed from Google Play. It is Google&#x27;s code rather than Unwind&#x27;s, it is not in the app as Unwind builds it, and it has nothing to do with anything Unwind records.</li></ul>
+<p>That is the whole list. The first six are checked against the finished app on every release build rather than written here from memory; the last is added by Google Play after the app is uploaded, where no build can see it, so it is checked against what the Play Console reports for each release.</p>
 <h2>Children</h2>
 <p>Unwind is made for adults and is not directed at children under 13. Regardless of age, the app collects nothing.</p>
 <h2>Changes to this policy</h2>
