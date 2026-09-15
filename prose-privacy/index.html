@@ -20,7 +20,7 @@
 <body>
 <main>
 <h1>Privacy Policy — Pause &amp; Prose</h1>
-<p><strong>Effective date: 26 August 2026</strong></p>
+<p><strong>Effective date: 14 September 2026</strong></p>
 <p>Pause &amp; Prose is an Android app that invites you to read before a distracting app opens. This policy explains, in plain words, what the app does and does not do with information. The short version: <strong>your data stays on your phone. We run no servers, we have no accounts, and we cannot see anything you do in the app.</strong></p>
 <h2>The accessibility service</h2>
 <p>The app lock works through an Android accessibility service. When you switch apps, Android tells the service <strong>the technical name of the app now on screen</strong> (for example, <code>com.instagram.android</code>) — nothing more.</p>
@@ -29,23 +29,31 @@
 <li>It reads <strong>no screen content, no text, no messages, no passwords and no screenshots</strong> — only the app's package name.</li>
 <li>The name is never sent anywhere. There is no "anywhere": the app has no server.</li>
 </ul>
-<p>So that one pause covers one visit, the service also holds two things in its memory while it is running: <strong>the name of the app you are in right now</strong> — a single name, replaced when you move to another app and dropped when you reach the home screen or the screen goes dark, never a list and never a history of where you have been — and <strong>a note that you have already paused for an app</strong>, which expires on its own, so that opening a keyboard, a photo picker or a permission prompt inside that app does not ask you to pause a second time.</p>
+<p>So that one pause covers one visit, the service also holds two things in its memory while it is running: <strong>the name of the app you are in right now</strong> — a single name, replaced when you move to another app and dropped when you reach the home screen or the screen goes dark, never a list and never a history of where you have been — and <strong>a note that an app has been let through</strong>, which expires on its own, so that opening a keyboard, a photo picker or a permission prompt inside that app does not ask you to pause a second time. The note is made when you pause for an app, and also when you send a quote to an app from the share sheet or open this policy from Settings, so the pause does not stand between you and something you just asked for.</p>
 <p>To tell "you switched to another app" apart from "a keyboard opened on top of the app you were already in", the service asks Android which of your installed apps are launchers, which are keyboards, and which have a home-screen icon. Those lists describe the apps on your phone, not you, and they are worked out afresh each time the service starts.</p>
 <p><strong>None of it is written to storage and none of it leaves the phone.</strong> It lives in the running app's memory and is gone when the service stops.</p>
 <p>You turn this service on yourself in Android's accessibility settings, after the app explains it, and you can turn it off there at any time.</p>
 <h2>What the app stores on your phone</h2>
-<p>Everything below lives only in the app's private storage on your device. We have no copy and no way to read it.</p>
+<p>Everything below lives in the app's private storage on your device. We have no copy of it and no way to read it.</p>
+<p>One qualification, because "only on your phone" would not be the whole truth: if you have Android's own backup switched on, Android copies that private storage into <strong>your</strong> Google account, the way it does for other apps, so a new phone can restore it. That copy belongs to you and your Google account — it is still not something we can see — and you can turn it off in Android's backup settings. It is also why the removed check-in entries are deleted outright rather than left on disk: rows nothing can display would otherwise have gone on being backed up.</p>
 <ul>
 <li>The first name you enter, used only to greet you.</li>
-<li>The list of apps you chose to lock.</li>
-<li>Your prose style choice, and any quotes you added yourself.</li>
-<li>Your reading position, pause count and streak.</li>
-<li>Your daily check-ins: the rating you picked and anything you wrote or dictated.</li>
-<li>Whether you bought the app or are in the free trial.</li>
+<li>The apps you chose to lock, and how often each one asks.</li>
+<li>The shelves you chose to read from, and any quotes you added yourself.</li>
+<li>The lines you kept with the heart.</li>
+<li>Your pause count, your streak, and how many pauses you took on each day, which is what the grid of days on the streak card is drawn from.</li>
+<li>Whether you bought the app or are in the free trial, and when the trial ends.</li>
+<li>Whether the app has already asked to send you notifications, so that it only ever asks once.</li>
 </ul>
 <p><strong>Deleting it:</strong> uninstalling the app, or clearing its storage in Android settings, permanently deletes all of it. There is nothing to delete anywhere else.</p>
+<p><strong>Earlier versions:</strong> an earlier version of the app kept a daily check-in — the rating you picked and anything you wrote or dictated. That feature has been removed, and updating to this version deletes those entries outright rather than leaving them sitting on disk behind a screen that no longer exists.</p>
 <h2>The microphone</h2>
-<p>The check-in screen has a "Tap to speak" button. If you use it, Android asks for microphone permission, and your speech is turned into text <strong>on the phone itself</strong> using Google's on-device speech engine. Your voice is not sent to us or to anyone; the finished text is stored only in your journal on the phone. If you never tap the button, the microphone is never requested and never used. (Google Play services may download the speech model once; that download is a model file coming to your phone, not your voice leaving it.)</p>
+<p>The quote editor has a microphone button, so you can add a quote by saying it instead of typing it. If you use it, Android asks for microphone permission, and your speech is turned into text <strong>on the phone itself</strong> using Google's on-device speech engine. Your voice is not sent to us or to anyone; the finished text goes into the quote you are writing and is stored only on the phone. If you never tap the button, the microphone is never requested and never used. (Google Play services may download the speech model once; that download is a model file coming to your phone, not your voice leaving it.)</p>
+<h2>The camera</h2>
+<p>You can also add a quote by photographing the page it is printed on. The first time you tap the camera button, Android asks for camera permission. If you say no, the app hands you to your phone's own camera app instead and the photo comes back the same way, so the permission is never needed. You can also choose a photo you already have: Android's photo picker gives the app that one picture and nothing else from your library.</p>
+<p>The photo is read <strong>on the phone itself</strong> by Google's on-device text recognition, and the words it finds go into the quote you are writing, where you can correct them. The photo is not sent to us or to anyone. The app keeps no collection of photos: the most recent one it took sits in the app's private cache until the next one replaces it, and is gone when you clear the app's storage or uninstall it. Android's backup does not copy it. If you never tap the camera button, the camera is never requested and never used.</p>
+<h2>Sharing a quote</h2>
+<p>When you share a quote, Android's share sheet hands the words and their attribution to the app you pick, and from there they are that app's to handle. Nothing goes to us, and the app does not record what you shared or where you sent it.</p>
 <h2>What uses the internet</h2>
 <p><strong>None of the writing does.</strong> Every quote and every passage in the app is built into it and read from your phone. The app never asks the internet what to show you, which is also why a pause opens instantly and works in aeroplane mode.</p>
 <p>Two things do use the network, and neither carries personal information:</p>
@@ -59,7 +67,7 @@
 <li>No analytics, no trackers, no advertising and no ad SDKs.</li>
 <li>No selling, sharing or transmitting of personal data — the app has no server to send it to.</li>
 <li>No reading of notifications, messages or screen content.</li>
-<li>Notifications: one optional daily check-in reminder, created on your phone, shown only if you allow notifications.</li>
+<li>Notifications: one reminder that your free trial is ending, scheduled on your phone when you start the trial and shown only if you allow notifications. Nothing else notifies you.</li>
 </ul>
 <h2>Children</h2>
 <p>Pause &amp; Prose is made for adults and is not directed at children under 13. Regardless of age, the app collects nothing.</p>
