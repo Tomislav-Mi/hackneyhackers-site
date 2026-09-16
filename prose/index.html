@@ -52,6 +52,12 @@
      the phones most of this page's traffic will arrive on. */
   .hero-shot img { width: 100%; height: auto; display: block;
                    border-radius: 14px; border: 1px solid var(--line); }
+  /* The launcher icon, the way /world-of-pomos/ leads with its own mark.
+     Needs its own class rather than `.hero img`, which the phone
+     screenshot beside it already claims. 72/18 keeps the 64/16 corner
+     ratio the homepage marks use. */
+  .app-icon { width: 72px; height: 72px; display: block;
+              border-radius: 18px; margin: 0 0 1.2rem; }
   h1 { font-size: 2.3rem; line-height: 1.2; margin: 0 0 0.8rem;
        letter-spacing: -0.01em; color: var(--blue); }
   .status { display: inline-block; font-size: 0.85rem; font-weight: 600;
@@ -154,6 +160,8 @@
 
   <div class="hero">
     <div class="hero-text">
+      <img class="app-icon" src="/assets/pauseandprose.png" width="192"
+           height="192" alt="">
       <h1>Pause &amp; Prose</h1>
       <p><span class="status">In review on Google Play</span></p>
       <p class="lede">Read one great line of literature before a
