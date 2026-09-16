@@ -1,0 +1,290 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pause &amp; Prose — one great line before the app opens</title>
+<meta name="description" content="An Android app that puts one line of real literature between you and the apps that pull you away. 1,117 lines, all built into the app, all traceable to a real page. One payment, no subscription, no ads.">
+<link rel="canonical" href="https://hackneyhackers.com/prose/">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://hackneyhackers.com/prose/">
+<meta property="og:site_name" content="Hackney Hackers">
+<meta property="og:title" content="Pause &amp; Prose — one great line before the app opens">
+<meta property="og:description" content="Choose the apps that pull at you. Each time one opens, Pause &amp; Prose offers a line from Austen, Dickinson, Marcus Aurelius or Wilde — then steps out of the way.">
+<meta property="og:image" content="https://hackneyhackers.com/assets/prose/og-pause-and-prose.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Pause &amp; Prose — come for the scroll, stay for the story">
+<meta name="twitter:card" content="summary_large_image">
+<style>
+  /*
+   * Prose's own palette, not the studio teal: royal blue #1C3190 on warm
+   * paper #FAF6EF, which is what the app, the listing cards and the
+   * screenshots below all use. The blue measures 10.31:1 on this paper and
+   * the gold 5.49:1 — both recorded in the app repo's listing-art README,
+   * and both chosen there so emphasis reads as text rather than decoration.
+   * Everything else — the 41rem measure, the uppercase section rules, the
+   * footer — is the house skeleton shared with / and /world-of-pomos/.
+   */
+  :root {
+    --paper: #FAF6EF; --ink: #14211F; --muted: #4A5654;
+    --blue: #1C3190; --deep: #142465; --cream: #F7F3EB;
+    --gold: #8A5A12; --line: #E6DFD2;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--paper); color: var(--ink);
+    font: 18px/1.65 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+      Helvetica, Arial, sans-serif;
+  }
+  main { max-width: 41rem; margin: 0 auto; padding: 0 1.25rem; }
+  header { padding: 2.2rem 0 0; }
+  .wordmark { font-weight: 700; letter-spacing: 0.02em; color: var(--blue);
+              text-decoration: none; }
+  .wordmark:hover { text-decoration: underline; }
+  a { color: var(--blue); }
+
+  .hero { padding: 3.2rem 0 3rem; border-bottom: 1px solid var(--line);
+          display: flex; gap: 2.5rem; align-items: flex-start; }
+  .hero-text { flex: 1 1 auto; min-width: 0; }
+  .hero-shot { flex: none; width: 232px; }
+  /* 540x960 source at 232px wide — a shade over 2x, so it stays crisp on
+     the phones most of this page's traffic will arrive on. */
+  .hero-shot img { width: 100%; height: auto; display: block;
+                   border-radius: 14px; border: 1px solid var(--line); }
+  h1 { font-size: 2.3rem; line-height: 1.2; margin: 0 0 0.8rem;
+       letter-spacing: -0.01em; color: var(--blue); }
+  .status { display: inline-block; font-size: 0.85rem; font-weight: 600;
+            color: var(--deep); background: #E7E9F4; border-radius: 999px;
+            padding: 0.15rem 0.75rem; }
+  .lede { font-size: 1.2rem; color: var(--ink); margin: 1.3rem 0 0; }
+  .hero p:not(.lede) { color: var(--muted); margin: 1rem 0 0; }
+
+  section { padding: 3rem 0; border-bottom: 1px solid var(--line); }
+  h2 { font-size: 0.95rem; text-transform: uppercase; letter-spacing: 0.12em;
+       color: var(--muted); font-weight: 600; margin: 0 0 1.6rem; }
+  section > p { color: var(--muted); margin: 0 0 1.2rem; max-width: 34rem; }
+  section > p:last-child { margin-bottom: 0; }
+  .em { color: var(--gold); font-weight: 600; }
+
+  /*
+   * THE CALL TO ACTION — the one block to change on the day review clears.
+   *
+   * Build 14 (1.4.8) went to Google for review on 2026-09-15. Until it is
+   * approved, play.google.com/store/apps/details?id=com.pauseandprose is a
+   * 404, and a button that leads to a 404 is worse than no button at all —
+   * which is the same call the app repo's store/social/POSTING-PLAN.md makes
+   * about the link in the Instagram bio.
+   *
+   * To flip this page the day it goes live: in BOTH .cta blocks, delete the
+   * <span class="cta-wait"> and uncomment the <a class="cta-go"> beside it.
+   * Then change the hero's .status pill to "On Google Play", and update the
+   * homepage entry at / , which carries the same "Coming to Google Play".
+   */
+  .cta { margin: 2rem 0 0; }
+  .cta-wait, .cta-go {
+    display: inline-block; font-size: 1rem; font-weight: 600;
+    border-radius: 999px; padding: 0.7rem 1.5rem; text-align: center;
+  }
+  .cta-wait { color: var(--deep); background: transparent;
+              border: 1px dashed #A9AFC9; }
+  .cta-go { color: var(--cream); background: var(--blue);
+            border: 1px solid var(--blue); text-decoration: none; }
+  .cta-go:hover { background: var(--deep); }
+  .cta-go:focus-visible, .wordmark:focus-visible, a:focus-visible {
+    outline: 2px solid var(--blue); outline-offset: 2px; }
+  .cta-note { color: var(--muted); font-size: 0.9rem; margin: 0.7rem 0 0;
+              max-width: 30rem; }
+
+  .steps { margin: 0; padding: 0; list-style: none; counter-reset: step; }
+  .steps li { position: relative; padding-left: 2.6rem; margin: 0 0 1.4rem;
+              color: var(--muted); max-width: 34rem; }
+  .steps li:last-child { margin-bottom: 0; }
+  .steps li::before {
+    counter-increment: step; content: counter(step);
+    position: absolute; left: 0; top: 0.1rem;
+    width: 1.75rem; height: 1.75rem; border-radius: 50%;
+    background: var(--blue); color: var(--cream);
+    font-size: 0.9rem; font-weight: 700; line-height: 1.75rem;
+    text-align: center;
+  }
+  .steps strong { color: var(--ink); font-weight: 600; }
+
+  .shots { display: flex; gap: 1.5rem; margin: 0; }
+  .shots figure { flex: 1 1 0; margin: 0; min-width: 0; }
+  .shots img { width: 100%; height: auto; display: block;
+               border-radius: 14px; border: 1px solid var(--line); }
+  .shots figcaption { color: var(--muted); font-size: 0.9rem;
+                      margin: 0.7rem 0 0; }
+
+  .facts { margin: 0; padding: 0; list-style: none; }
+  .facts li { color: var(--muted); margin: 0 0 1.1rem; max-width: 34rem;
+              padding-left: 1.1rem; position: relative; }
+  .facts li:last-child { margin-bottom: 0; }
+  .facts li::before { content: ""; position: absolute; left: 0; top: 0.72em;
+                      width: 5px; height: 5px; border-radius: 50%;
+                      background: var(--blue); }
+  .facts strong { color: var(--ink); font-weight: 600; }
+
+  blockquote { margin: 0 0 1.4rem; padding: 0 0 0 1.1rem;
+               border-left: 3px solid var(--line); color: var(--ink); }
+  blockquote p { margin: 0 0 0.4rem; }
+  blockquote cite { font-style: normal; font-size: 0.9rem;
+                    color: var(--gold); font-weight: 600; }
+
+  .contact p { margin: 0 0 0.5rem; }
+  .contact p:last-child { margin-bottom: 0; }
+  footer { padding: 2.2rem 0 3.5rem; color: var(--muted); font-size: 0.85rem;
+           line-height: 1.6; }
+  footer a { color: var(--muted); }
+
+  @media (max-width: 680px) {
+    .hero { display: block; padding-top: 2.6rem; }
+    .hero-shot { width: 190px; margin: 2rem auto 0; }
+    h1 { font-size: 1.8rem; }
+    .lede { font-size: 1.1rem; }
+    .shots { flex-direction: column; gap: 2rem; }
+    .shots figure { max-width: 240px; }
+  }
+</style>
+</head>
+<body>
+<main>
+  <header><a class="wordmark" href="/">Hackney Hackers</a></header>
+
+  <div class="hero">
+    <div class="hero-text">
+      <h1>Pause &amp; Prose</h1>
+      <p><span class="status">In review on Google Play</span></p>
+      <p class="lede">Read one great line of literature before a
+      distracting app opens.</p>
+      <p>Choose the apps that tend to swallow your evening. When you open
+      one, Pause &amp; Prose stops it and gives you something worth reading
+      first — a line from Austen or Dickinson, Marcus Aurelius or Oscar
+      Wilde. Read it, tap Continue, and the app opens. That is the whole
+      idea.</p>
+      <p>No leaderboards. No shaming. Nothing to sign up for.</p>
+
+      <div class="cta">
+        <span class="cta-wait">Coming to Google Play</span>
+        <!-- <a class="cta-go" href="https://play.google.com/store/apps/details?id=com.pauseandprose">Get it on Google Play</a> -->
+        <p class="cta-note">It is with Google's reviewers now. This page
+        gets the link the day it clears.</p>
+      </div>
+    </div>
+
+    <div class="hero-shot">
+      <img src="/assets/prose/pause.webp" width="540" height="960"
+           alt="The pause over YouTube: four lines of Emily Dickinson in
+                cream on royal blue, with a Continue button and the note
+                &quot;YouTube will open next&quot;.">
+    </div>
+  </div>
+
+  <section>
+    <h2>How it works</h2>
+    <ol class="steps">
+      <li><strong>Choose the apps that pull at you.</strong> The ones you
+      open without deciding to.</li>
+      <li><strong>One of them opens, and a line arrives first.</strong>
+      It is on the screen the instant the screen is — nothing is fetched
+      from anywhere.</li>
+      <li><strong>Read it, and carry on.</strong> Tap Continue and the app
+      you reached for opens. Pause &amp; Prose steps out of the way.</li>
+    </ol>
+  </section>
+
+  <section>
+    <h2>You set the pace</h2>
+    <div class="shots">
+      <figure>
+        <img src="/assets/prose/home.webp" width="540" height="960"
+             alt="The Home screen: a card reading &quot;App lock is on — 2
+                  apps will give you something to read before they
+                  open&quot;, above a Choose apps button.">
+        <figcaption>Every locked app gets its own setting: ask every time,
+        or at most once every 1, 3, 5, 15 or 30 minutes. You are never
+        interrupted while you are using it.</figcaption>
+      </figure>
+      <figure>
+        <img src="/assets/prose/shelves.webp" width="540" height="960"
+             alt="The setup question &quot;What would you like to
+                  read?&quot;, with the six shelves as tappable chips —
+                  Poetry, Shakespeare, Philosophy &amp; the Stoics and Wit
+                  &amp; aphorism switched on, Novels &amp; tales and Essays
+                  &amp; letters off.">
+        <figcaption>Six shelves — novels and tales, poetry, Shakespeare,
+        philosophy and the Stoics, essays and letters, wit and aphorism.
+        Keep the ones you love and turn the rest off.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section>
+    <h2>What is inside</h2>
+    <ul class="facts">
+      <li><strong>1,117 lines, from 348 authors.</strong> Everything on
+      your shelves comes round once before anything repeats. Ten complete
+      works are in there too, a passage at a time — <em>Meditations</em>,
+      the <em>Tao Te Ching</em>, Shakespeare's <em>Sonnets</em>,
+      <em>Leaves of Grass</em>.</li>
+      <li><strong>Lines to keep.</strong> Tap the heart and a line waits
+      for you in Favourites. Add your own, too: type it, speak it, or
+      photograph the page.</li>
+      <li><strong>All of it on your phone.</strong> The whole collection is
+      built into the app, so a pause opens instantly and works with no
+      signal at all. Nothing you write leaves your phone unless you share
+      it.</li>
+      <li><strong>Built to be read.</strong> Large type from the start,
+      warm paper, and body text held to <span class="em">WCAG AAA</span>
+      contrast — and tested for it.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>About the writing</h2>
+    <blockquote>
+      <p>How dreary to be somebody!<br>
+      How public, like a frog<br>
+      To tell your name the livelong day<br>
+      To an admiring bog!</p>
+      <cite>Emily Dickinson, Poems</cite>
+    </blockquote>
+    <p>Every line comes from a public-domain original, and the standard for
+    including one is strict: out of copyright in the United States, by an
+    author who died more than seventy years ago, and traceable to a real
+    page. The English is a public-domain translation, or our own.</p>
+    <p>The lines everyone misattributes — to Eliot, to Twain, to Wilde —
+    are left out on purpose.</p>
+  </section>
+
+  <section>
+    <h2>The price</h2>
+    <p>Try it free, then keep it with a single payment —
+    <span class="em">$4.99</span> in the US, <span class="em">&pound;4.39</span>
+    in the UK, and Google Play shows you your own local price before you
+    decide. No subscription, no ads, nothing to sign up for.</p>
+    <div class="cta">
+      <span class="cta-wait">Coming to Google Play</span>
+      <!-- <a class="cta-go" href="https://play.google.com/store/apps/details?id=com.pauseandprose">Get it on Google Play</a> -->
+      <p class="cta-note">Android 8.0 and above.</p>
+    </div>
+  </section>
+
+  <section class="contact">
+    <h2>Contact</h2>
+    <p><a href="mailto:support@hackneyhackers.com">support@hackneyhackers.com</a></p>
+    <p><a href="/prose-privacy/">Privacy policy</a></p>
+    <p><a href="/">More from Hackney Hackers</a></p>
+  </section>
+
+  <footer>
+    Character illustrations: free illustrations &ldquo;Tegaki Desuno&rdquo;
+    (<a href="https://regeld.com/desi">regeld.com/desi</a>).<br>
+    Hackney Hackers Ltd is registered in England and Wales,
+    company&nbsp;no.&nbsp;17350468.<br>
+    Registered office: 1F Manley Court, London&nbsp;N16&nbsp;0PB.
+  </footer>
+</main>
+</body>
+</html>
