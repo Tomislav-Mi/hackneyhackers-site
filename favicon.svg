@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
+  <!--
+    The studio mark. Deliberately plain: Hackney Hackers has no logo, only
+    the teal wordmark, and a favicon is a poor place to invent one. An H in
+    the site's own teal and cream, drawn as rectangles rather than set in a
+    typeface, so it does not depend on a font being present and stays legible
+    at 16px. Replace it freely if a real studio mark ever exists.
+
+    It must not be the Pause & Prose mascot. That art is licensed, and using
+    it as the fixed image symbolising the business is exactly what the
+    Tegaki Desuno terms prohibit — see the app repo's
+    store/brand/mascot/LICENSE.md. The mascot marks the app, on /prose/.
+  -->
+  <rect width="256" height="256" rx="56" fill="#0D3B3A"/>
+  <path fill="#F7F3EB" d="M70 64h34v128H70zM152 64h34v128h-34zM70 111h116v34H70z"/>
+</svg>
