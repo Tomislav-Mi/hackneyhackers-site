@@ -16,6 +16,14 @@
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="World of Pomos — every work sequence is a roguelike descent">
 <meta name="twitter:card" content="summary_large_image">
+<!-- The game's own sprite, overriding the studio mark at /favicon.ico. It is
+     15x18 pixel art, which no browser can downscale without turning it to
+     mush, so the .ico carries hand-composed 16/32/48 frames: one crop (the
+     top 16 rows, losing only the cloak hem) at 1x, 2x and 3x, so every pixel
+     stays square at every size. apple-touch is the whole sprite at 9x, which
+     needs no crop at that scale. -->
+<link rel="icon" href="/assets/worldofpomos-favicon.ico" sizes="16x16 32x32 48x48">
+<link rel="apple-touch-icon" href="/assets/worldofpomos-apple-touch-icon.png">
 <style>
   :root {
     --paper: #FAFAF7; --ink: #17201F; --muted: #5C6663;
