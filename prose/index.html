@@ -80,29 +80,13 @@
   section > p:last-child { margin-bottom: 0; }
   .em { color: var(--gold); font-weight: 600; }
 
-  /*
-   * THE CALL TO ACTION — the one block to change on the day review clears.
-   *
-   * Build 14 (1.4.8) went to Google for review on 2026-09-15. Until it is
-   * approved, play.google.com/store/apps/details?id=com.pauseandprose is a
-   * 404, and a button that leads to a 404 is worse than no button at all —
-   * which is the same call the app repo's store/social/POSTING-PLAN.md makes
-   * about the link in the Instagram bio.
-   *
-   * To flip this page the day it goes live: in BOTH .cta blocks, delete the
-   * <span class="cta-wait"> and uncomment the <a class="cta-go"> beside it.
-   * Then change the hero's .status pill to "On Google Play", and update the
-   * homepage entry at / , which carries the same "Coming to Google Play".
-   */
   .cta { margin: 2rem 0 0; }
-  .cta-wait, .cta-go {
+  .cta-go {
     display: inline-block; font-size: 1rem; font-weight: 600;
     border-radius: 999px; padding: 0.7rem 1.5rem; text-align: center;
+    color: var(--cream); background: var(--blue);
+    border: 1px solid var(--blue); text-decoration: none;
   }
-  .cta-wait { color: var(--deep); background: transparent;
-              border: 1px dashed #A9AFC9; }
-  .cta-go { color: var(--cream); background: var(--blue);
-            border: 1px solid var(--blue); text-decoration: none; }
   .cta-go:hover { background: var(--deep); }
   .cta-go:focus-visible, .wordmark:focus-visible, a:focus-visible {
     outline: 2px solid var(--blue); outline-offset: 2px; }
@@ -170,7 +154,7 @@
       <img class="app-icon" src="/assets/pauseandprose.png" width="192"
            height="192" alt="">
       <h1>Pause &amp; Prose</h1>
-      <p><span class="status">In review on Google Play</span></p>
+      <p><span class="status">On Google Play</span></p>
       <p class="lede">Read one great line of literature before a
       distracting app opens.</p>
       <p>Choose the apps that tend to swallow your evening. When you open
@@ -181,10 +165,7 @@
       <p>No leaderboards. No shaming. Nothing to sign up for.</p>
 
       <div class="cta">
-        <span class="cta-wait">Coming to Google Play</span>
-        <!-- <a class="cta-go" href="https://play.google.com/store/apps/details?id=com.pauseandprose">Get it on Google Play</a> -->
-        <p class="cta-note">It is with Google's reviewers now. This page
-        gets the link the day it clears.</p>
+        <a class="cta-go" href="https://play.google.com/store/apps/details?id=com.pauseandprose">Get it on Google Play</a>
       </div>
     </div>
 
@@ -280,8 +261,7 @@
     in the UK, and Google Play shows you your own local price before you
     decide. No subscription, no ads, nothing to sign up for.</p>
     <div class="cta">
-      <span class="cta-wait">Coming to Google Play</span>
-      <!-- <a class="cta-go" href="https://play.google.com/store/apps/details?id=com.pauseandprose">Get it on Google Play</a> -->
+      <a class="cta-go" href="https://play.google.com/store/apps/details?id=com.pauseandprose">Get it on Google Play</a>
       <p class="cta-note">Android 8.0 and above.</p>
     </div>
   </section>
