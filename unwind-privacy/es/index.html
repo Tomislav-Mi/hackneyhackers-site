@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Política de privacidad de Unwind</title>
+<link rel="icon" href="/assets/unwind.svg" type="image/svg+xml">
+<link rel="icon" href="/assets/unwind-favicon-32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="/assets/unwind-apple-touch-icon.png">
+<style>
+  body { margin: 0; background: #F5F4F2; color: #0B0B0B;
+         font: 18px/1.65 'Instrument Sans', ui-sans-serif, system-ui,
+               -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif; }
+  main { max-width: 42rem; margin: 0 auto; padding: 3rem 1.25rem 5rem; }
+  h1 { color: #267F53; font-size: 2rem; line-height: 1.2;
+       letter-spacing: -0.015em; }
+  h2 { color: #267F53; font-size: 1.3rem; margin-top: 2.2rem;
+       letter-spacing: -0.01em; }
+  code { font-size: 0.85em; background: #FDEDD4; padding: 0.1em 0.35em;
+         border-radius: 4px; }
+  li { margin: 0.45em 0; }
+  a { color: #267F53; }
+  footer { margin-top: 3rem; color: #5A5A57; font-size: 0.85em; }
+  .lang { margin: 0; text-align: right; font-size: 0.85em; color: #5A5A57; }
+  .lang a { color: #5A5A57; }
+  /* Japanese in the phone's own Japanese face, a little more open. */
+  html:lang(ja) body { font-family: ui-sans-serif, system-ui, -apple-system,
+         'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Noto Sans JP',
+         'Yu Gothic', Meiryo, sans-serif; line-height: 1.85; }
+  html:lang(ja) h1, html:lang(ja) h2 { letter-spacing: 0; }
+  /* Korean in the phone's own Korean face, broken at spaces, as Korean is. */
+  html:lang(ko) body { font-family: ui-sans-serif, system-ui, -apple-system,
+         'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', sans-serif;
+         line-height: 1.8; word-break: keep-all; }
+  html:lang(ko) h1, html:lang(ko) h2 { letter-spacing: 0; }
+</style>
+</head>
+<body>
+<main>
+<p class="lang"><a href="/unwind-privacy/" hreflang="en" lang="en">English</a> · <a href="/unwind-privacy/de/" hreflang="de" lang="de">Deutsch</a> · <a href="/unwind-privacy/ja/" hreflang="ja" lang="ja">日本語</a> · <a href="/unwind-privacy/ko/" hreflang="ko" lang="ko">한국어</a> · <a href="/unwind-privacy/fr/" hreflang="fr" lang="fr">Français</a></p>
+<h1>Política de privacidad de Unwind</h1>
+<p><strong>En vigor desde el 5 de octubre de 2026</strong></p>
+<p>Unwind es una app para Android que te pide repasar una línea con el dedo antes de que se abra una app que te distrae. Esta política explica, con palabras sencillas, qué hace y qué no hace la app con la información. En pocas palabras: <strong>Unwind no tiene servidor ni cuentas, y ningún código escrito por nosotros abre una conexión de red, así que la app nunca envía a ninguna parte nada de lo que registra sobre ti.</strong> Lo que registra se guarda en tu teléfono, y solo llega a tu propia cuenta de Google si la copia de seguridad de Android lo guarda allí. La biblioteca de pagos de Google, que la app necesita para venderse, envía a Google sus propios datos de diagnóstico, y en ellos no hay nada de lo que Unwind registra.</p>
+<h2>El servicio de accesibilidad</h2>
+<p>El bloqueo de apps funciona con un servicio de accesibilidad de Android. Cuando cambias de app, Android avisa al servicio de que una ventana ha pasado a primer plano. Ese aviso incluye <strong>el nombre técnico de la app que está en pantalla</strong> (por ejemplo, <code>com.instagram.android</code>), junto con detalles como el título de la ventana. El servicio lee el nombre de la app e ignora el resto.</p>
+<ul><li>El servicio compara ese nombre, en tu teléfono, con la lista de apps tachadas. Si coincide, se abre la pantalla de la línea.</li><li><strong>No lee el contenido de la pantalla, ni textos, ni mensajes, ni contraseñas, ni capturas de pantalla</strong>: solo el nombre del paquete de la app. El servicio está configurado con <code>canRetrieveWindowContent=&quot;false&quot;</code>, lo que significa que no puede mirar dentro de ninguna ventana, y solo escucha un tipo de evento: que una ventana pase a primer plano.</li><li>No abre la pantalla de la línea mientras tu teléfono está bloqueado, ni mientras Android indica que está sonando una llamada o que hay una en curso. Para saberlo, le pregunta a Android si el teléfono está bloqueado y si el sonido está ajustado para una llamada. Ninguna de las dos respuestas se guarda ni se envía.</li><li>Si desbloqueas el teléfono y entras directamente en una app tachada, la pantalla de la línea se abre en cuanto desaparece la pantalla de bloqueo. Eso incluye una llamada o una alarma de una app tachada que se muestra sobre la pantalla de bloqueo: contéstala ahí, con los botones de la pantalla de bloqueo, y la pantalla de la línea no se interpone, porque una llamada contestada es una llamada en curso.</li><li>El nombre nunca se envía a ninguna parte. No hay ninguna “parte”: la app no tiene servidor, y ningún código escrito por nosotros abre una conexión de red.</li></ul>
+<p>Para que una línea repasada valga para una visita, el servicio también guarda dos cosas en su memoria mientras está en marcha: <strong>el nombre de la app en la que estás ahora mismo</strong> (un solo nombre, que se reemplaza cuando pasas a otra app) y <strong>una nota de que ya has repasado la línea para una app</strong>, que dura mientras sigas en esa app. Abrir un teclado, un selector de fotos o un diálogo del sistema dentro de ella no te pide repasar otra vez; irte a otra app o a la pantalla de inicio, o dejar que la pantalla se apague, borra la nota, y volver cuesta otra línea. Pasar por Unwind, por ejemplo para abrir una carta que alguien te envió, no la borra. Abrir esta política desde la configuración de Unwind en un navegador tachado deja la misma nota sin que repases nada, y esa nota se borra de la misma manera.</p>
+<p>Para que desbloquear el teléfono y entrar en una app tachada siga pidiendo una línea, mientras el teléfono está bloqueado guarda una cosa más: <strong>el nombre de una app tachada que pasó a primer plano detrás de la pantalla de bloqueo, y cuándo</strong>. Lo olvida cuando desbloqueas el teléfono o cuando la pantalla se apaga.</p>
+<p>Para distinguir “cambiaste a otra app” de “se abrió un teclado sobre la app en la que ya estabas”, el servicio le pregunta a Android cuáles de tus apps instaladas son lanzadores, cuáles son teclados y cuáles tienen un icono en la pantalla de inicio. Esas listas describen las apps de tu teléfono, no a ti, y se calculan de nuevo cada vez que el servicio arranca.</p>
+<p><strong>Nada de eso se escribe en el almacenamiento y nada de eso sale del teléfono.</strong> Vive en la memoria de la app en marcha y desaparece cuando el servicio se detiene.</p>
+<p>Este servicio lo activas tú, en la configuración de accesibilidad de Android, después de que la app te lo explique, y puedes desactivarlo allí cuando quieras.</p>
+<h2>Qué guarda la app en tu teléfono</h2>
+<p>Todo lo que sigue está en el almacenamiento privado de la app en tu dispositivo, en una base de datos llamada <code>unwind.db</code>, salvo si compraste la app, que es un único indicador en un pequeño archivo de ajustes propio de la app. No tenemos ninguna copia ni manera de leerlo.</p>
+<ul><li><strong>Las apps tachadas</strong>: el nombre del paquete de cada una, el nombre que muestra Android, el modo que elegiste y cuándo la agregaste.</li><li><strong>Tu configuración</strong>: si terminaste la introducción, el interruptor general del bloqueo, el ancho de la línea, el sonido de la pared y su voz, y qué aspecto lleva la app.</li><li><strong>Tu baraja de cartas</strong>: de cada carta que dibujaste o recibiste, su nombre, su color, el trazo mismo como una lista de puntos, si la dibujaste tú o te la enviaron, y cuándo llegó.</li><li><strong>Tu diario de esperas</strong>: una entrada por cada línea que repasaste, que indica qué dibujo o carta era, cuándo la repasaste y <strong>qué app tachada esperaba detrás de la pantalla de la línea</strong>. Es un historial de cuándo abriste las apps tachadas. Se guarda para que los dibujos puedan volver a dibujarse, tenues, en la pantalla de inicio de Unwind, y la app nunca lo envía a ninguna parte.</li><li><strong>Si compraste la app</strong> o sigues en la prueba gratuita, y cuándo empezó y termina esa prueba.</li></ul>
+<p><strong>Copias antes de una actualización:</strong> cuando una actualización está a punto de cambiar la forma de esa base de datos, la app primero la copia, tal como estaba, en el mismo almacenamiento privado, para que, si la actualización sale mal, una posterior pueda devolverte tus datos. Una copia contiene lo que tenía la base de datos en ese momento, se queda en tu teléfono y no forma parte de la copia de seguridad de Android. Se conservan las copias de las tres últimas actualizaciones de este tipo y las anteriores se eliminan. Algo que borras en la app, como una carta, puede seguir en una copia hecha antes de que lo borraras, hasta que esa copia se elimine a su vez.</p>
+<p><strong>Para borrarlo:</strong> desinstalar la app, o borrar su almacenamiento en la configuración de Android, elimina todo del teléfono para siempre, copias incluidas. No elimina una copia que la copia de seguridad de Android haya hecho en tu cuenta de Google (más abajo). Esa copia puede seguir allí, y restaurarse si vuelves a instalar la app, hasta que caduque o la borres en la configuración de copia de seguridad de tu cuenta de Google.</p>
+<h2>La copia de seguridad de Android</h2>
+<p>La app permite la copia de seguridad estándar de Android, lo que significa que todo lo anterior (las apps tachadas, tu configuración, tu baraja, tu diario de esperas, las fechas de tu prueba gratuita y si compraste la app) puede copiarse en <strong>la copia de seguridad de apps de tu propia cuenta de Google</strong>, y restaurarse cuando configures un teléfono nuevo o reinstales la app. Pasarte a un teléfono nuevo con la transferencia de teléfono a teléfono de Android copia lo mismo. Esa copia de seguridad es una función de Android entre tú y Google, regida por la política de privacidad de Google: no nos llega a nosotros y no podemos leerla. Puedes desactivar la copia de seguridad de apps para todo el teléfono, o solo para esta app, en la configuración del sistema de Android.</p>
+<h2>Qué usa internet</h2>
+<p><strong>Ningún código escrito por nosotros.</strong> Nada de lo que escribimos en Unwind abre una conexión de red: no hay analíticas, ni informes de errores, ni servidor nuestro al que llamar. Cada línea, carta y dibujo se genera o se lee en el propio teléfono.</p>
+<p>Hay tres cosas más que conviene decir con claridad, porque puedes comprobarlas por tu cuenta y lo justo es que las oigas primero aquí.</p>
+<ol><li><strong>La app terminada sí lleva el permiso <code>INTERNET</code></strong>, junto con <code>ACCESS_NETWORK_STATE</code>, y por eso la ficha de Play dirá “acceso completo a la red”. No pedimos ninguno de los dos. Llegan dentro de la biblioteca de pagos de Google Play, que trae consigo un componente de diagnóstico de Google, y un permiso que declara cualquier biblioteca se convierte en un permiso que declara toda la app. Preferiríamos que no fuera así. Quitarlo significa quitar parte de la biblioteca de pagos, y no lo publicaremos hasta haber comprobado que no rompe la compra de la app.</li><li><strong>Esa biblioteca sí usa internet, para su propio diagnóstico.</strong> La app la necesita para venderse, y la usa cada vez que abres la app para preguntarle a Google Play si la compraste. La biblioteca envía a Google su propio diagnóstico sobre cómo fueron esas consultas, con datos del dispositivo: su modelo y su versión de Android, el país, el idioma y la zona horaria configurados, el código del operador móvil, el tipo de red a la que está conectado y qué versiones de Unwind y de la biblioteca se están ejecutando. Eso va a Google, no a nosotros, y se rige por la política de privacidad de Google. No incluye nada de lo que Unwind registra: ni las apps que tachas, ni tu diario de esperas, ni tu baraja.</li><li><strong>Las compras en Google Play</strong> las gestiona Google Play, en la propia app de Google y en los servidores de Google. Los datos de pago van a Google, nunca a nosotros: Unwind solo sabe “comprada” o “no comprada” y guarda ese indicador en el teléfono. La transacción se rige por la política de privacidad de Google.</li></ol>
+<p>Nada de eso cambia lo que importa. Las apps que tachas, tu diario de esperas y tu baraja se escriben en el almacenamiento privado de este teléfono y se leen desde allí, y ninguna línea de código de esta app los envía a ninguna parte. La única copia de ellos que puede salir del teléfono es la que hace la propia copia de seguridad de Android, descrita más arriba.</p>
+<h2>Enviar una carta</h2>
+<p>Puedes enviar a otra persona una carta que dibujaste. Cuando lo haces, la app escribe esa única carta en un archivo temporal y se la pasa al menú para compartir de Android, y <strong>tú</strong> eliges a dónde va. El archivo contiene el dibujo y su nombre, nada sobre ti, tu teléfono o las apps que tachas. La app nunca comparte nada por su cuenta, y nunca más que la carta que elegiste.</p>
+<h2>Lo que la app no hace</h2>
+<ul><li>No hay cuentas ni inicio de sesión.</li><li>No hay analíticas nuestras, ni rastreadores nuestros, ni publicidad, ni SDK de anuncios. La biblioteca de pagos de Google trae su propio diagnóstico; consulta “Qué usa internet” más arriba.</li><li>No vende ni comparte datos personales, y ningún código nuestro los transmite: Unwind no tiene servidor al que enviarlos.</li><li>No lee notificaciones, mensajes ni el contenido de la pantalla.</li><li>No usa ubicación, contactos, cámara ni micrófono.</li></ul>
+<h2>Todos los permisos</h2>
+<p>Tres que pide Unwind:</p>
+<ul><li><strong>Servicio de accesibilidad</strong>: descrito más arriba; el bloqueo de apps depende de él.</li><li><strong>Vibración</strong>: la línea responde a tu dedo con pequeños toques.</li><li><strong>Pagos</strong>: permite que Google Play gestione la compra única.</li></ul>
+<p>Y tres que llegan dentro de las bibliotecas con las que está hecha la app. Android los une a la app terminada como si ella misma los hubiera pedido, así que también son permisos de la app y aparecen aquí:</p>
+<ul><li><strong>Internet</strong> y <strong>Ver conexiones de red</strong>: de la biblioteca de pagos de Google Play, como se describe más arriba. Ningún código escrito por nosotros usa ninguno de los dos; la biblioteca los usa para su propio diagnóstico.</li><li><strong>Un permiso de receptor privado</strong>, con el nombre de la propia app, creado por una biblioteca de soporte de Android para que ninguna otra app pueda acceder a uno de los avisos internos de Unwind. No le concede nada a nadie.</li></ul>
+<p>Y uno que Google Play añade a la copia que entrega:</p>
+<ul><li><strong>Comprobar licencia</strong> (<code>com.android.vending.CHECK_LICENSE</code>): parte de la protección automática de Google Play, una comprobación, hecha a través de la app de Play Store, de que la copia de tu teléfono se instaló desde Google Play. Es código de Google, no de Unwind, no está en la app tal como Unwind la compila y no tiene nada que ver con nada de lo que Unwind registra.</li></ul>
+<p>Esa es la lista completa. Los seis primeros se comprueban en la app terminada en cada compilación de lanzamiento, en lugar de escribirse aquí de memoria; el último lo añade Google Play después de subir la app, donde ninguna compilación puede verlo, así que se compara con lo que Play Console indica en cada lanzamiento.</p>
+<h2>Niños</h2>
+<p>Unwind está hecha para adultos y no está dirigida a menores de 13 años. Tengan la edad que tengan, no se recopila nada de lo que registra Unwind. Lo único que se recopila es el diagnóstico de la biblioteca de pagos sobre el teléfono, descrito en “Qué usa internet”, que va a Google.</p>
+<h2>Cambios en esta política</h2>
+<p>Si la app empieza a hacer algo que esta política no cubre, la política se actualizará primero y cambiará la fecha de entrada en vigor de arriba. La app enlaza a la versión actual desde su configuración, en “Política de privacidad”.</p>
+<h2>Contacto</h2>
+<p>Preguntas sobre privacidad: <strong>support@hackneyhackers.com</strong></p>
+<footer>Generada a partir de <code>docs/PRIVACY.es.md</code> por
+<code>store/play/build-privacy-page.py</code>. Edita el Markdown, no este archivo.</footer>
+</main>
+</body>
+</html>

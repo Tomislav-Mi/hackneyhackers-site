@@ -21,15 +21,25 @@
   li { margin: 0.45em 0; }
   a { color: #267F53; }
   footer { margin-top: 3rem; color: #5A5A57; font-size: 0.85em; }
-  .lang { margin: 0; text-align: right; font-size: 0.85em; }
+  .lang { margin: 0; text-align: right; font-size: 0.85em; color: #5A5A57; }
   .lang a { color: #5A5A57; }
+  /* Japanese in the phone's own Japanese face, a little more open. */
+  html:lang(ja) body { font-family: ui-sans-serif, system-ui, -apple-system,
+         'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Noto Sans JP',
+         'Yu Gothic', Meiryo, sans-serif; line-height: 1.85; }
+  html:lang(ja) h1, html:lang(ja) h2 { letter-spacing: 0; }
+  /* Korean in the phone's own Korean face, broken at spaces, as Korean is. */
+  html:lang(ko) body { font-family: ui-sans-serif, system-ui, -apple-system,
+         'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', sans-serif;
+         line-height: 1.8; word-break: keep-all; }
+  html:lang(ko) h1, html:lang(ko) h2 { letter-spacing: 0; }
 </style>
 </head>
 <body>
 <main>
-<p class="lang"><a href="/unwind-privacy/de/" hreflang="de" lang="de">Deutsch</a></p>
+<p class="lang"><a href="/unwind-privacy/de/" hreflang="de" lang="de">Deutsch</a> · <a href="/unwind-privacy/ja/" hreflang="ja" lang="ja">日本語</a> · <a href="/unwind-privacy/ko/" hreflang="ko" lang="ko">한국어</a> · <a href="/unwind-privacy/es/" hreflang="es" lang="es">Español</a> · <a href="/unwind-privacy/fr/" hreflang="fr" lang="fr">Français</a></p>
 <h1>Privacy Policy — Unwind</h1>
-<p><strong>Effective date: October 3, 2026</strong></p>
+<p><strong>Effective date: October 5, 2026</strong></p>
 <p>Unwind is an Android app that asks you to trace a path with your finger before a distracting app opens. This policy explains, in plain words, what the app does and does not do with information. The short version: <strong>Unwind has no server and no account, and no code we wrote opens a network connection, so the app never sends anything it records about you anywhere.</strong> What it records is kept on your phone, and in your own Google account only if Android&#x27;s backup copies it there. Google&#x27;s billing library, which the app needs to sell itself, sends Google diagnostics of its own, and none of what Unwind records is in them.</p>
 <h2>The accessibility service</h2>
 <p>The app lock works through an Android accessibility service. When you switch apps, Android tells the service that a window has come to the front. That notice carries <strong>the technical name of the app now on screen</strong> (for example, <code>com.instagram.android</code>), along with details such as the window&#x27;s title. The service reads the app&#x27;s name and ignores the rest.</p>
@@ -41,7 +51,7 @@
 <p>You turn this service on yourself in Android&#x27;s accessibility settings, after the app explains it, and you can turn it off there at any time.</p>
 <h2>What the app stores on your phone</h2>
 <p>Everything below lives in the app&#x27;s private storage on your device, in a database called <code>unwind.db</code> — all but whether you bought the app, which is a single flag in a small settings file of the app&#x27;s own. We have no copy and no way to read it.</p>
-<ul><li><strong>The apps you chose to lock</strong> — each one&#x27;s package name, the label Android shows for it, the mode you picked, and when you added it.</li><li><strong>Your settings</strong> — whether you have finished onboarding, the master blocking switch, the path width, the wall&#x27;s sound and its voice, and which look the app wears.</li><li><strong>Your deck of cards</strong> — for each card you drew or received, its name, its colour, the stroke itself as a list of points, whether you drew it or were sent it, and when it arrived.</li><li><strong>Your walked diary</strong> — one row for each path you traced: which drawing or card it was, when you traced it, and <strong>which locked app was waiting behind the gate</strong>. This is a history of when you opened the apps you chose to lock. It is kept so the drawings can be redrawn faintly on your home screen, and the app never sends it anywhere.</li><li><strong>Whether you bought the app</strong> or are still inside the free trial, and when that trial started and ends.</li></ul>
+<ul><li><strong>The apps you chose to lock</strong> — each one&#x27;s package name, the label Android shows for it, the mode you picked, and when you added it.</li><li><strong>Your settings</strong> — whether you have finished onboarding, the master blocking switch, the path width, the wall&#x27;s sound and its voice, and which look the app wears.</li><li><strong>Your deck of cards</strong> — for each card you drew or received, its name, its colour, the stroke itself as a list of points, whether you drew it or were sent it, and when it arrived.</li><li><strong>Your walked diary</strong> — one row for each path you traced: which drawing or card it was, when you traced it, and <strong>which locked app was waiting behind the gate</strong>. This is a history of when you opened the apps you chose to lock. It is kept so the drawings can be redrawn faintly on the Home screen inside Unwind, and the app never sends it anywhere.</li><li><strong>Whether you bought the app</strong> or are still inside the free trial, and when that trial started and ends.</li></ul>
 <p><strong>Copies kept before an update:</strong> when an update is about to change how that database is laid out, the app first copies it, as it was, into the same private storage, so that if the update ever gets something wrong a later one can put your data back. A copy holds what the database held at that moment, stays on your phone, and is not part of Android&#x27;s backup. The copies from the last three such updates are kept and older ones are deleted. Something you delete in the app, such as a card, can remain in a copy taken before you deleted it, until that copy is deleted in turn.</p>
 <p><strong>Deleting it:</strong> uninstalling the app, or clearing its storage in Android settings, permanently deletes all of it from the phone, copies included. It does not delete a copy that Android&#x27;s backup has made in your Google account (below). That copy can remain, and be restored if you install the app again, until it expires or you delete it in your Google account&#x27;s backup settings.</p>
 <h2>Android&#x27;s own backup</h2>
@@ -64,7 +74,7 @@
 <ul><li><strong>Check licence</strong> (<code>com.android.vending.CHECK_LICENSE</code>) — part of Google Play&#x27;s automatic protection: a check, made through the Play Store app, that the copy on your phone was installed from Google Play. It is Google&#x27;s code rather than Unwind&#x27;s, it is not in the app as Unwind builds it, and it has nothing to do with anything Unwind records.</li></ul>
 <p>That is the whole list. The first six are checked against the finished app on every release build rather than written here from memory; the last is added by Google Play after the app is uploaded, where no build can see it, so it is checked against what the Play Console reports for each release.</p>
 <h2>Children</h2>
-<p>Unwind is made for adults and is not directed at children under 13. Regardless of age, we collect nothing.</p>
+<p>Unwind is made for adults and is not directed at children under 13. Regardless of age, nothing Unwind records is collected. The only data collected from the app is the billing library&#x27;s diagnostics about the phone, described under &quot;What uses the internet&quot;, and they go to Google.</p>
 <h2>Changes to this policy</h2>
 <p>If the app ever starts doing something this policy does not cover, the policy will be updated first and the effective date above will change. The app links to the current version from its Settings, under &quot;Privacy policy&quot;.</p>
 <h2>Contact</h2>
