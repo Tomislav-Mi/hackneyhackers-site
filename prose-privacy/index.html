@@ -22,7 +22,7 @@
 <body>
 <main>
 <h1>Privacy Policy — Pause &amp; Prose</h1>
-<p><strong>Effective date: 15 September 2026</strong></p>
+<p><strong>Effective date: 5 October 2026</strong></p>
 <p>Pause &amp; Prose is an Android app that invites you to read before a distracting app opens. This policy explains, in plain words, what the app does and does not do with information. The short version: <strong>your data stays on your phone. We run no servers, we have no accounts, and we cannot see anything you do in the app.</strong></p>
 <h2>The accessibility service</h2>
 <p>The app lock works through an Android accessibility service. When you switch apps, Android tells the service <strong>the technical name of the app now on screen</strong> (for example, <code>com.instagram.android</code>) — nothing more.</p>
@@ -38,11 +38,14 @@
 <h2>What the app stores on your phone</h2>
 <p>Everything below lives in the app's private storage on your device. We have no copy of it and no way to read it.</p>
 <p>One qualification, because "only on your phone" would not be the whole truth: if you have Android's own backup switched on, Android copies that private storage into <strong>your</strong> Google account, the way it does for other apps, so a new phone can restore it. That copy belongs to you and your Google account — it is still not something we can see — and you can turn it off in Android's backup settings. It is also why the removed check-in entries are deleted outright rather than left on disk: rows nothing can display would otherwise have gone on being backed up.</p>
+<p>The book you read at your pauses is the exception: its text and cover are kept out of that backup, so they never leave the phone at all. What is backed up with the rest is your place in it — a number — and any line of it you choose to keep: a passage you keep with the heart, or the sentence a word you looked up came from.</p>
 <ul>
 <li>The first name you enter, used only to greet you.</li>
 <li>The apps you chose to lock, and how often each one asks.</li>
 <li>The shelves you chose to read from, and any quotes you added yourself.</li>
 <li>The lines you kept with the heart.</li>
+<li>The words you held on a pause to look up, each with the sentence it was in and where that sentence is from, which is what Your words lists. Removing a word there, or with the bookmark on its card, deletes it.</li>
+<li>If you choose a book to read at your pauses — one of the three that come with the app, or an EPUB of your own: its text and cover, and where you are in it. For an EPUB of your own, Android's file picker gives the app that one file and nothing else; the app reads it once and does not keep the file itself. Removing the book in the app deletes its text, its cover and your place in it.</li>
 <li>Your pause count, your streak, and how many pauses you took on each day, which is what the grid of days on the streak card is drawn from.</li>
 <li>How many words the lines you paused on add up to, which the streak card holds up against a famous book. It is only a number: the app keeps no list of the lines you were shown.</li>
 <li>Whether you bought the app or are in the free trial, and when the trial ends.</li>
@@ -56,24 +59,26 @@
 <p>You can also add a quote by photographing the page it is printed on. The first time you tap the camera button, Android asks for camera permission. If you say no, the app hands you to your phone's own camera app instead and the photo comes back the same way, so the permission is never needed. You can also choose a photo you already have: Android's photo picker gives the app that one picture and nothing else from your library.</p>
 <p>The photo is read <strong>on the phone itself</strong> by Google's on-device text recognition, and the words it finds go into the quote you are writing, where you can correct them. The photo is not sent to us or to anyone. The app keeps no collection of photos: the most recent one it took sits in the app's private cache until the next one replaces it, and is gone when you clear the app's storage or uninstall it. Android's backup does not copy it. If you never tap the camera button, the camera is never requested and never used.</p>
 <h2>Sharing a quote</h2>
-<p>When you share a quote, Android's share sheet hands the words and their attribution to the app you pick, and from there they are that app's to handle. Nothing goes to us, and the app does not record what you shared or where you sent it.</p>
+<p>When you share a quote, Android's share sheet hands the words and their attribution to the app you pick, with a line saying they were shared from Pause &amp; Prose and a link to the app's page on Google Play. From there they are that app's to handle. The link is the same on every share and carries nothing about you or what you shared. Nothing goes to us, and the app does not record what you shared or where you sent it.</p>
 <h2>What uses the internet</h2>
-<p><strong>None of the writing does.</strong> Every quote and every passage in the app is built into it and read from your phone. The app never asks the internet what to show you, which is also why a pause opens instantly and works in aeroplane mode.</p>
-<p>Two things do use the network, and neither carries personal information:</p>
+<p><strong>None of the writing does.</strong> Every quote and every passage in the app is built into it and read from your phone. The app never asks the internet what to show you, which is also why a pause opens instantly and works in aeroplane mode. The dictionary is built in too: a word you hold to look up is looked up on the phone, and never sent anywhere.</p>
+<p>Four things do use the network. None of them carries anything you write, say or photograph in the app:</p>
 <ol>
 <li><strong>On-device model downloads.</strong> Google Play services fetches the speech and text-recognition models once, if you use dictation or photograph a page. That is a model file coming to your phone, not your words leaving it.</li>
-<li><strong>Google Play purchases.</strong> The one-time purchase and the trial are handled by Google Play. Payment details go to Google, never to us — the app only learns "purchased" or "not purchased" and stores that flag on the phone. Google's own privacy policy governs the transaction.</li>
+<li><strong>Google Play purchases.</strong> The one-time purchase and the trial are handled by Google Play. Payment details go to Google, never to us — the app only learns "purchased" or "not purchased" and stores that flag on the phone. Google's own privacy policy governs the transaction. Google's billing library also reports technical details about the purchase flow and the phone to Google — the phone's model, country, carrier, time zone and network type — as part of processing it.</li>
+<li><strong>Google's ML Kit diagnostics.</strong> The speech and text recognition come from Google's ML Kit, and ML Kit reports to Google how it is being used, so that Google can find faults and see how its features are used. A report says which app and which ML Kit feature and version were involved, what happened (a check, a download, a recognition, an error), the phone's language setting, the language the speech model is set to, and an identifier: a random one made for this installation, and for text recognition, which runs inside Google Play services, an identifier for the device. Each report also carries the same technical details about the phone as the billing library's: its maker and model, its Android version and build, the country and mobile network it reports, its time zone and the kind of network it is on. Reports are queued on the phone and sent to Google over an encrypted connection, and the app has no switch to stop them. Simply opening the quote editor is enough to queue one, because it asks whether dictation is available before it shows the microphone. <strong>They carry nothing you write, dictate or photograph:</strong> not your quotes, not your voice, not the words recognised in a picture and not the picture. They go to Google, never to us — we cannot see them — and Google says it does not pass them on to anyone else. Google describes this data at &lt;https://developers.google.com/ml-kit/android-data-disclosure&gt;.</li>
+<li><strong>Google Play's rating card.</strong> Once you have been pausing for a few days, the app may ask Google Play to show its rating card, at most once every four months. The card is Google Play's own: if you choose to rate the app or write a review there, Google Play receives it and publishes it as a public review on the app's store page, under Google's terms. The app is never told whether you rated, what you gave or what you wrote, and you can change or delete a review in the Play Store at any time.</li>
 </ol>
 <h2>What the app does not do</h2>
 <ul>
 <li>No accounts and no sign-in.</li>
-<li>No analytics, no trackers, no advertising and no ad SDKs.</li>
-<li>No selling, sharing or transmitting of personal data — the app has no server to send it to.</li>
+<li>No advertising, no ad SDKs, no advertising ID and no trackers. The app adds no analytics of its own; the only usage reports are the ML Kit diagnostics described above, which go to Google.</li>
+<li>No selling or sharing of personal data, and nothing sent to us — we have no server to send it to. What leaves the phone is the Google Play and ML Kit traffic described above, and nothing else.</li>
 <li>No reading of notifications, messages or screen content.</li>
 <li>Notifications: one reminder that your free trial is ending, scheduled on your phone when you start the trial and shown only if you allow notifications. Nothing else notifies you.</li>
 </ul>
 <h2>Children</h2>
-<p>Pause &amp; Prose is made for adults and is not directed at children under 13. Regardless of age, the app collects nothing.</p>
+<p>Pause &amp; Prose is made for adults and is not directed at children under 13. Regardless of age, the app sends us nothing; the only data that leaves the phone is the Google traffic described above.</p>
 <h2>Changes to this policy</h2>
 <p>If the app ever starts doing something this policy does not cover, the policy will be updated first and the effective date above will change.</p>
 <h2>Contact</h2>

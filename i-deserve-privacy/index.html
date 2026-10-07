@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Privacy Policy — i deserve</title>
+<link rel="icon" href="/assets/ideserve.svg" type="image/svg+xml">
+<style>
+  body { margin: 0; background: #F4F1EA; color: #0B0B0B;
+         font: 18px/1.65 ui-sans-serif, system-ui, -apple-system,
+               'Segoe UI', Helvetica, Arial, sans-serif; }
+  main { max-width: 42rem; margin: 0 auto; padding: 3rem 1.25rem 5rem; }
+  h1 { font-size: 2rem; line-height: 1.2; letter-spacing: -0.015em;
+       padding-bottom: 0.5rem; border-bottom: 4px solid #45D67E; }
+  h2 { font-size: 1.3rem; margin-top: 2.2rem; letter-spacing: -0.01em; }
+  code { font-size: 0.85em; background: #F9BE0033; padding: 0.1em 0.35em;
+         border-radius: 4px; }
+  li { margin: 0.45em 0; }
+  a { color: #0B0B0B; text-decoration-color: #45D67E;
+      text-decoration-thickness: 2px; }
+  footer { margin-top: 3rem; color: #5A5A57; font-size: 0.85em; }
+</style>
+</head>
+<body>
+<main>
+<h1>Privacy Policy — i deserve</h1>
+<p><strong>Effective date: 4 October 2026</strong></p>
+<p>i deserve is an Android app that meets you with a short affirmation before a distracting app opens. This policy explains, in plain words, what the app does and does not do with information. The short version: <strong>what you choose, write and keep stays on your phone. We run no servers, we have no accounts, and we cannot see anything you do in the app.</strong></p>
+<h2>The accessibility service</h2>
+<p>The pause before an app opens works through an Android accessibility service. When you switch apps, Android tells the service <strong>the technical name of the app now on screen</strong> (for example, <code>com.instagram.android</code>) — nothing more.</p>
+<ul><li>The service compares that name, on your phone, against the apps you chose to pause. If it matches, the affirmation opens.</li><li>It reads <strong>no screen content, no text, no messages, no passwords and no screenshots</strong> — only the app&#x27;s package name. The app is built so that it cannot: it never asks Android for the contents of any window.</li><li>The name is never sent anywhere.</li></ul>
+<p>So that one pause covers one visit, the service also holds two things in its memory while it is running: <strong>the name of the app you are in right now</strong> — a single name, replaced when you move to another app, never a list and never a history — and <strong>a note that an app has been let through</strong>, which expires on its own after the unlock window you chose in settings, so that a keyboard or a permission prompt opening inside that app does not ask you to pause a second time.</p>
+<p>To tell &quot;you switched to another app&quot; apart from &quot;a keyboard opened on top of the app you were already in&quot;, the service asks Android which of your installed apps are launchers, which are keyboards, and which have a home-screen icon. Those lists describe the apps on your phone, not you, and they are worked out afresh each time the service starts.</p>
+<p><strong>None of that is written to storage and none of it leaves the phone.</strong> It lives in the running app&#x27;s memory and is gone when the service stops.</p>
+<p>You turn this service on yourself in Android&#x27;s accessibility settings, after the app explains it, and you can turn it off there at any time.</p>
+<h2>What the app stores on your phone</h2>
+<p>Everything below lives in the app&#x27;s private storage on your device. We have no copy of it and no way to read it.</p>
+<ul><li>The apps you chose to pause — their names and package names — and how often each one asks: every time, sometimes, or never.</li><li>The kinds of affirmation you chose to be shown, the unlock window, and whether the grid of days makes a sound, and in which voice.</li><li>The days you took a pause, how many pauses you took on each, and the line you were shown — which is what the grid of days on the home screen is drawn from.</li><li>The lines you kept with the heart, and the day you kept each one.</li><li>Lines you wrote yourself, and whether each is switched on.</li><li>What you wrote in answer to &quot;what matters to you.&quot; and &quot;something kind you did.&quot; Those pages are never shown anywhere except when you open them, and never appear in a pause.</li><li>Whether you bought the app or are in the free trial, and when the trial started and ends.</li></ul>
+<p><strong>Deleting it:</strong> uninstalling the app, or clearing its storage in Android settings, permanently deletes all of it. There is nothing to delete anywhere else.</p>
+<h2>Android&#x27;s own backup</h2>
+<p>The app allows Android&#x27;s standard backup, which means the things listed above may be copied into <strong>your own Google account&#x27;s app backup</strong>, and restored when you set up a new phone or reinstall the app. That backup is a feature of Android between you and Google under Google&#x27;s privacy policy — it does not go to us, and we cannot read it. You can turn app backup off for the whole phone, or for this app, in Android&#x27;s system settings.</p>
+<h2>The microphone</h2>
+<p>The pages where you write your own lines have a microphone button, so you can say something instead of typing it. The first time you tap it, Android asks for microphone permission. Your speech is turned into text <strong>on the phone itself</strong> by Google&#x27;s on-device speech engine: your voice is not sent to us or to anyone, and the text goes only into the page you are writing on. If you never tap the button, the microphone is never requested and never used, and everything on those pages works by typing.</p>
+<h2>What uses the internet</h2>
+<p><strong>Nothing you choose, write or keep.</strong> Every affirmation in the app is built into it and read from your phone, which is also why a pause opens instantly and works in aeroplane mode. No code we wrote opens a network connection.</p>
+<p>The app does carry the <code>INTERNET</code> and <code>ACCESS_NETWORK_STATE</code> permissions, and Play&#x27;s listing will say &quot;full network access&quot; because of them. They arrive inside two Google libraries the app is built on, and three things use them:</p>
+<ol><li><strong>The speech model download.</strong> If you use the microphone, Google&#x27;s on-device speech engine may download its model once and keep it up to date. That is a model file coming to your phone, not your words leaving it.</li><li><strong>Diagnostics from Google&#x27;s speech library.</strong> Google&#x27;s ML Kit, which provides the on-device speech engine, can send Google technical information about itself: the phone&#x27;s make, model, Android version and build, the country and mobile network it reports, its language setting, time zone and the kind of network it is on, this app&#x27;s package name and version, a per-installation ID that Google says is not meant to identify you or your phone, performance measurements, error codes, and the language the speech engine is set to. Google says it encrypts this in transit and does not pass it to third parties. <strong>It never includes anything you say, write, keep or choose to pause.</strong> It is Google&#x27;s, not ours; we receive none of it.</li><li><strong>Google Play purchases.</strong> The one-time purchase is handled by Google Play, in Google&#x27;s own app and on Google&#x27;s servers. Payment details go to Google, never to us — the app only learns &quot;purchased&quot; or &quot;not purchased&quot; and stores that on the phone. Google&#x27;s billing library carries diagnostics of its own, and Google&#x27;s privacy policy governs the transaction. The free trial is counted on the phone and involves no one.</li></ol>
+<h2>Sharing the app</h2>
+<p>Settings has a row to share i deserve. It hands a single fixed sentence about the app to Android&#x27;s share sheet, and <strong>you</strong> choose where it goes. It carries nothing about you, your phone or the apps you pause.</p>
+<h2>Rating the app</h2>
+<p>Once you have bought i deserve and taken a pause on at least five different days, the app may ask Google Play to show its rating card over the grid of days — at most once every four months, and Google Play may decide not to show it at all. The card is Google Play&#x27;s own. The stars and any words you give it go to Google Play under your Google account and appear as a public review in the Play Store, exactly as a review left in the Play Store itself would. <strong>The app is never told whether the card appeared, whether you rated it, or what you wrote.</strong></p>
+<h2>What the app does not do</h2>
+<ul><li>No accounts and no sign-in.</li><li>No analytics of ours, no trackers of ours, no advertising and no ad SDKs. Google&#x27;s speech and billing libraries carry diagnostics of their own; see &quot;What uses the internet&quot; above.</li><li>No selling or sharing of personal data — we have no server to receive it.</li><li>No reading of notifications, messages or screen content.</li><li>No notifications at all.</li><li>No location, no contacts and no camera.</li></ul>
+<h2>Permissions, in full</h2>
+<p>Four that i deserve asks for:</p>
+<ul><li><strong>Accessibility service</strong> — described above; the pause depends on it.</li><li><strong>Microphone</strong> — only if you tap the microphone button, as described above.</li><li><strong>Vibrate</strong> — the grid of days answers your fingertip with small taps.</li><li><strong>Billing</strong> — lets Google Play handle the one-time purchase.</li></ul>
+<p>And three that arrive inside the libraries the app is built on. Android merges those into the finished app as though it had asked for them itself, so they are the app&#x27;s permissions too and are listed here:</p>
+<ul><li><strong>Internet</strong> and <strong>View network connections</strong> — from Google&#x27;s speech and billing libraries, as described above.</li><li><strong>A private receiver permission</strong>, named after the app itself, created by an Android support library so that one of the app&#x27;s own internal broadcasts cannot be reached by other apps. It grants nothing to anyone.</li></ul>
+<h2>Children</h2>
+<p>i deserve is made for adults and is not directed at children under 13.</p>
+<h2>Changes to this policy</h2>
+<p>If the app ever starts doing something this policy does not cover, the policy will be updated first and the effective date above will change.</p>
+<h2>Contact</h2>
+<p>Questions about privacy: <strong>support@hackneyhackers.com</strong></p>
+<footer>Generated from <code>docs/PRIVACY.md</code> by
+<code>store/play/build-privacy-page.py</code>. Edit the Markdown, not this file.</footer>
+</main>
+</body>
+</html>
