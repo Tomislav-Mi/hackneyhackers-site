@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Unwind — a line to trace before the app opens</title>
+<meta name="description" content="An Android app that puts a line to trace between you and the apps you open without thinking. Each line is made on the phone the moment it interrupts you. One payment, no subscription, no ads.">
+<link rel="canonical" href="https://hackneyhackers.com/unwind/">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://hackneyhackers.com/unwind/">
+<meta property="og:site_name" content="Hackney Hackers">
+<meta property="og:title" content="Unwind — a line to trace before the app opens">
+<meta property="og:description" content="Trace a line before distracting apps open. Then decide: open it, or not now.">
+<meta property="og:image" content="https://hackneyhackers.com/assets/unwind/og-unwind.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="The Unwind wordmark in a cobalt pill, over a wall of colourful scales with a line traced on each">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/assets/unwind.svg" type="image/svg+xml">
+<link rel="icon" href="/assets/unwind-favicon-32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="/assets/unwind-apple-touch-icon.png">
+<style>
+  /*
+   * Unwind's own palette, not the studio teal: the app's Paper, Ink and
+   * Cobalt from ui/theme/Color.kt in the app repo, with its Cream on the
+   * button as on the app's mark. Brand cobalt measures 5.40:1 on this
+   * paper, so it is kept for the large heading, the button and the marks;
+   * links and the pill take a deeper cobalt, 7.41:1. Everything else is
+   * the house skeleton shared with / and /prose/.
+   */
+  :root {
+    --paper: #F5F4F2; --ink: #0B0B0B; --muted: #4A4A47;
+    --cobalt: #155FCC; --deep: #0F4BA6; --cream: #FDEDD4;
+    --line: #E2E0DB;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--paper); color: var(--ink);
+    font: 18px/1.65 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+      Helvetica, Arial, sans-serif;
+  }
+  main { max-width: 41rem; margin: 0 auto; padding: 0 1.25rem; }
+  header { padding: 2.2rem 0 0; }
+  .wordmark { font-weight: 700; letter-spacing: 0.02em; color: var(--deep);
+              text-decoration: none; }
+  .wordmark:hover { text-decoration: underline; }
+  a { color: var(--deep); }
+
+  .hero { padding: 3.2rem 0 3rem; border-bottom: 1px solid var(--line);
+          display: flex; gap: 2.5rem; align-items: flex-start; }
+  .hero-text { flex: 1 1 auto; min-width: 0; }
+  .hero-shot { flex: none; width: 232px; }
+  .app-icon { width: 72px; height: 72px; display: block;
+              border-radius: 18px; margin: 0 0 1.2rem; }
+  h1 { font-size: 2.3rem; line-height: 1.2; margin: 0 0 0.8rem;
+       letter-spacing: -0.01em; color: var(--cobalt); }
+  .status { display: inline-block; font-size: 0.85rem; font-weight: 600;
+            color: var(--deep); background: #E2EAF7; border-radius: 999px;
+            padding: 0.15rem 0.75rem; }
+  .lede { font-size: 1.2rem; color: var(--ink); margin: 1.3rem 0 0; }
+  .hero p:not(.lede) { color: var(--muted); margin: 1rem 0 0; }
+
+  /* The Short, the same way the homepage shows it: nothing loads from
+     YouTube until someone presses play. */
+  .short { display: block; width: 100%; height: auto; aspect-ratio: 9 / 16;
+           background: var(--paper); border: 1px solid var(--line);
+           border-radius: 14px; }
+
+  section { padding: 3rem 0; border-bottom: 1px solid var(--line); }
+  h2 { font-size: 0.95rem; text-transform: uppercase; letter-spacing: 0.12em;
+       color: var(--muted); font-weight: 600; margin: 0 0 1.6rem; }
+  section > p { color: var(--muted); margin: 0 0 1.2rem; max-width: 34rem; }
+  section > p:last-child { margin-bottom: 0; }
+
+  .cta { margin: 2rem 0 0; }
+  .cta-go {
+    display: inline-block; font-size: 1rem; font-weight: 600;
+    border-radius: 999px; padding: 0.7rem 1.5rem; text-align: center;
+    color: var(--cream); background: var(--cobalt);
+    border: 1px solid var(--cobalt); text-decoration: none;
+  }
+  .cta-go:hover { background: var(--deep); }
+  a:focus-visible { outline: 2px solid var(--cobalt); outline-offset: 2px; }
+  .cta-note { color: var(--muted); font-size: 0.9rem; margin: 0.7rem 0 0;
+              max-width: 30rem; }
+
+  .steps { margin: 0; padding: 0; list-style: none; counter-reset: step; }
+  .steps li { position: relative; padding-left: 2.6rem; margin: 0 0 1.4rem;
+              color: var(--muted); max-width: 34rem; }
+  .steps li:last-child { margin-bottom: 0; }
+  .steps li::before {
+    counter-increment: step; content: counter(step);
+    position: absolute; left: 0; top: 0.1rem;
+    width: 1.75rem; height: 1.75rem; border-radius: 50%;
+    background: var(--cobalt); color: var(--cream);
+    font-size: 0.9rem; font-weight: 700; line-height: 1.75rem;
+    text-align: center;
+  }
+  .steps strong { color: var(--ink); font-weight: 600; }
+
+  .shots { display: flex; gap: 1.5rem; margin: 0; }
+  .shots figure { flex: 1 1 0; margin: 0; min-width: 0; }
+  .shots img { width: 100%; height: auto; display: block;
+               border-radius: 14px; border: 1px solid var(--line); }
+  .shots figcaption { color: var(--muted); font-size: 0.9rem;
+                      margin: 0.7rem 0 0; }
+
+  .facts { margin: 0; padding: 0; list-style: none; }
+  .facts li { color: var(--muted); margin: 0 0 1.1rem; max-width: 34rem;
+              padding-left: 1.1rem; position: relative; }
+  .facts li:last-child { margin-bottom: 0; }
+  .facts li::before { content: ""; position: absolute; left: 0; top: 0.72em;
+                      width: 5px; height: 5px; border-radius: 50%;
+                      background: var(--cobalt); }
+  .facts strong { color: var(--ink); font-weight: 600; }
+
+  .contact p { margin: 0 0 0.5rem; }
+  .contact p:last-child { margin-bottom: 0; }
+  footer { padding: 2.2rem 0 3.5rem; color: var(--muted); font-size: 0.85rem;
+           line-height: 1.6; }
+
+  @media (max-width: 680px) {
+    .hero { display: block; padding-top: 2.6rem; }
+    .hero-shot { width: 190px; margin: 2rem auto 0; }
+    h1 { font-size: 1.8rem; }
+    .lede { font-size: 1.1rem; }
+    .shots { flex-direction: column; gap: 2rem; }
+    .shots figure { max-width: 240px; }
+  }
+</style>
+</head>
+<body>
+<main>
+  <header><a class="wordmark" href="/">Hackney Hackers</a></header>
+
+  <div class="hero">
+    <div class="hero-text">
+      <img class="app-icon" src="/assets/unwind.svg" width="72" height="72"
+           alt="">
+      <h1>Unwind</h1>
+      <p><span class="status">On Google Play</span></p>
+      <p class="lede">Trace a line before a distracting app opens. Then
+      decide: open it, or not now.</p>
+      <p>Cross out the apps you reach for without thinking. When one of them
+      opens, a card comes up first, with a line to trace. Follow it slowly
+      to the end, then make a plain choice: open the app, or not now.</p>
+      <p>No password. No lecture. Nothing to sign up for.</p>
+
+      <div class="cta">
+        <a class="cta-go" href="https://play.google.com/store/apps/details?id=com.unwind">Get it on Google Play</a>
+      </div>
+    </div>
+
+    <div class="hero-shot">
+      <!-- Nothing loads from YouTube until someone presses play. The
+           frame shows its srcdoc: a poster from /assets/ and a link, and
+           only that link reaches youtube-nocookie.com. -->
+      <iframe class="short" title="Unwind, in a YouTube Short"
+              width="232" height="412"
+              src="https://www.youtube-nocookie.com/embed/4M-rXtSUy9E"
+              srcdoc="<style>html,body{margin:0;height:100%}a{display:grid;place-items:center;height:100%;background:#F5F4F0 url(/assets/unwind/short.webp) center/cover}span{position:relative;width:64px;height:64px;border-radius:50%;background:#155FCC;box-shadow:0 2px 12px rgba(0,0,0,.3)}span::after{content:'';position:absolute;left:25px;top:20px;border-style:solid;border-width:12px 0 12px 20px;border-color:transparent transparent transparent #FDEDD4}a:hover span,a:focus-visible span{background:#0F4BA6}a:focus-visible{outline:3px solid #155FCC;outline-offset:-3px}</style><a href='https://www.youtube-nocookie.com/embed/4M-rXtSUy9E?autoplay=1&amp;amp;rel=0' aria-label='Play the Short. It loads from YouTube.'><span></span></a>"
+              allow="autoplay; encrypted-media; picture-in-picture; fullscreen"
+              allowfullscreen></iframe>
+    </div>
+  </div>
+
+  <section>
+    <h2>How it works</h2>
+    <ol class="steps">
+      <li><strong>Cross out the apps that pull at you.</strong> One stroke
+      crosses an app out, and another lets it go. Everything else on your
+      phone stays exactly as it is.</li>
+      <li><strong>One of them opens, and a line comes first.</strong> Each
+      line is made on the phone at the moment it interrupts you. Unless you
+      drew it, no one has seen it before.</li>
+      <li><strong>Trace it, then choose.</strong> Open the app, or not now.
+      Choose not now, and the trace stays with you, as a scale on your
+      wall.</li>
+    </ol>
+  </section>
+
+  <section>
+    <h2>Every trace you keep</h2>
+    <div class="shots">
+      <figure>
+        <img src="/assets/unwind/question.webp" width="540" height="1200"
+             alt="The question after a trace: leave the app and the scale
+                  is yours, open it and the scale goes. A small button opens
+                  the app, above a large orange scale marked Not now.">
+        <figcaption>The trace done, one question. Leave the app, and the
+        scale is yours. Open it, and the scale goes.</figcaption>
+      </figure>
+      <figure>
+        <img src="/assets/unwind/wall.webp" width="540" height="1200"
+             alt="Unwind's home screen: a wall of scales in many colours,
+                  each with a different line on it, under the Unwind
+                  wordmark.">
+        <figcaption>Every trace you keep becomes a scale on a wall — the
+        app's home screen, a diary of the times you waited.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section>
+    <h2>What is inside</h2>
+    <ul class="facts">
+      <li><strong>A deck of your own.</strong> Draw your own line, and it is
+      dealt like the rest. Send it to a friend, and theirs can come to your
+      deck. The seven built-in kinds of line are always in it.</li>
+      <li><strong>Calm, not strict.</strong> No password and no lecture,
+      just a moment before the app opens. One trace covers one visit: leave
+      the app, and the next visit asks again.</li>
+      <li><strong>Nothing to sign up for.</strong> No account, no server,
+      no ads. The accessibility service Unwind asks for learns only which
+      app has come to the front, never what is on the screen, and Unwind
+      never sends what you trace anywhere.</li>
+      <li><strong>Six languages.</strong> Unwind speaks English, German,
+      French, Spanish, Japanese and Korean, and follows your phone's
+      language.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Why a pause</h2>
+    <p>Researchers have tried putting a few seconds, and a plain way out,
+    in front of the apps people reach for. Our film looks at what that
+    changed, and what it didn't. The studies were of apps like Unwind, not
+    of Unwind itself.</p>
+    <p><a href="https://www.youtube.com/watch?v=LiJv-_boITY">What a
+    six-second pause changes, and what it doesn't</a> — eight minutes, on
+    YouTube.</p>
+  </section>
+
+  <section>
+    <h2>The price</h2>
+    <p>Try it free for 48 hours, then keep it with a single payment. No
+    subscription, no ads, and Google Play shows you the price in your own
+    currency before you buy. If you skip it, blocking simply pauses — your
+    phone is never held hostage.</p>
+    <div class="cta">
+      <a class="cta-go" href="https://play.google.com/store/apps/details?id=com.unwind">Get it on Google Play</a>
+      <p class="cta-note">Android 8.0 and above.</p>
+    </div>
+  </section>
+
+  <section class="contact">
+    <h2>Contact</h2>
+    <p><a href="mailto:support@hackneyhackers.com">support@hackneyhackers.com</a></p>
+    <p><a href="https://www.youtube.com/@unwindapp">Unwind on YouTube</a></p>
+    <p><a href="https://www.instagram.com/com.unwind.app/">Unwind on Instagram</a></p>
+    <p><a href="/unwind-privacy/">Privacy policy</a></p>
+    <p><a href="/">More from Hackney Hackers</a></p>
+  </section>
+
+  <footer>
+    Hackney Hackers Ltd is registered in England and Wales,
+    company&nbsp;no.&nbsp;17350468.<br>
+    Registered office: 1F Manley Court, London&nbsp;N16&nbsp;0PB.
+  </footer>
+</main>
+</body>
+</html>
