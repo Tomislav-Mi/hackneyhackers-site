@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bigger than You — a size comparison game</title>
+<meta name="description" content="An Android game about the size of everything, from a proton to the universe. Guess the size, then see the truth side by side. Free, no ads, works offline.">
+<link rel="canonical" href="https://hackneyhackers.com/bigger-than-you/">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://hackneyhackers.com/bigger-than-you/">
+<meta property="og:site_name" content="Hackney Hackers">
+<meta property="og:title" content="Bigger than You — a size comparison game">
+<meta property="og:description" content="Guess how big a blue whale really is, then see it next to you. Free, no ads, works offline.">
+<meta property="og:image" content="https://hackneyhackers.com/assets/bigger-than-you/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Bigger than You: an eggplant and a banana beside a ruler, on a deep blue background">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/assets/bigger-than-you-favicon-32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="/assets/bigger-than-you-apple-touch-icon.png">
+<style>
+  /*
+   * The game's own palette: the Night navy and Coral from its store
+   * screenshots. Coral is kept for the button and marks, where the navy
+   * text on it is large; headings and links are navy on paper. Everything
+   * else is the house skeleton shared with / and /unwind/.
+   */
+  :root {
+    --paper: #F7F6FB; --ink: #14173D; --muted: #484B6B;
+    --navy: #1B1F4B; --coral: #FF6B5B; --coral-deep: #F04F3D;
+    --line: #E1E0EC;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--paper); color: var(--ink);
+    font: 18px/1.65 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+      Helvetica, Arial, sans-serif;
+  }
+  main { max-width: 41rem; margin: 0 auto; padding: 0 1.25rem; }
+  header { padding: 2.2rem 0 0; }
+  .wordmark { font-weight: 700; letter-spacing: 0.02em; color: var(--navy);
+              text-decoration: none; }
+  .wordmark:hover { text-decoration: underline; }
+  a { color: var(--navy); }
+  .hero { padding: 3.2rem 0 3rem; border-bottom: 1px solid var(--line);
+          display: flex; gap: 2.5rem; align-items: flex-start; }
+  .hero-text { flex: 1 1 auto; min-width: 0; }
+  .hero-shot { flex: none; width: 232px; }
+  .app-icon { width: 72px; height: 72px; display: block;
+              border-radius: 18px; margin: 0 0 1.2rem; }
+  h1 { font-size: 2.3rem; line-height: 1.2; margin: 0 0 0.8rem;
+       letter-spacing: -0.01em; color: var(--navy); }
+  .status { display: inline-block; font-size: 0.85rem; font-weight: 600;
+            color: var(--navy); background: #E4E5F4; border-radius: 999px;
+            padding: 0.15rem 0.75rem; }
+  .lede { font-size: 1.2rem; color: var(--ink); margin: 1.3rem 0 0; }
+  .hero p:not(.lede) { color: var(--muted); margin: 1rem 0 0; }
+  .hero-shot img, .shots img { width: 100%; height: auto; display: block;
+               border-radius: 14px; border: 1px solid var(--line); }
+  section { padding: 3rem 0; border-bottom: 1px solid var(--line); }
+  h2 { font-size: 0.95rem; text-transform: uppercase; letter-spacing: 0.12em;
+       color: var(--muted); font-weight: 600; margin: 0 0 1.6rem; }
+  section > p { color: var(--muted); margin: 0 0 1.2rem; max-width: 34rem; }
+  section > p:last-child { margin-bottom: 0; }
+  .cta { margin: 2rem 0 0; }
+  .cta-go {
+    display: inline-block; font-size: 1rem; font-weight: 700;
+    border-radius: 999px; padding: 0.7rem 1.5rem; text-align: center;
+    color: var(--navy); background: var(--coral);
+    border: 1px solid var(--coral); text-decoration: none;
+  }
+  .cta-go:hover { background: var(--coral-deep); border-color: var(--coral-deep); }
+  a:focus-visible { outline: 2px solid var(--navy); outline-offset: 2px; }
+  .cta-note { color: var(--muted); font-size: 0.9rem; margin: 0.7rem 0 0;
+              max-width: 30rem; }
+  .facts { margin: 0; padding: 0; list-style: none; }
+  .facts li { color: var(--muted); margin: 0 0 1.1rem; max-width: 34rem;
+              padding-left: 1.1rem; position: relative; }
+  .facts li:last-child { margin-bottom: 0; }
+  .facts li::before { content: ""; position: absolute; left: 0; top: 0.72em;
+                      width: 5px; height: 5px; border-radius: 50%;
+                      background: var(--coral); }
+  .facts strong { color: var(--ink); font-weight: 600; }
+  .shots { display: flex; gap: 1.5rem; margin: 0; }
+  .shots figure { flex: 1 1 0; margin: 0; min-width: 0; }
+  .shots figcaption { color: var(--muted); font-size: 0.9rem;
+                      margin: 0.7rem 0 0; }
+  .contact p { margin: 0 0 0.5rem; }
+  .contact p:last-child { margin-bottom: 0; }
+  footer { padding: 2.2rem 0 3.5rem; color: var(--muted); font-size: 0.85rem;
+           line-height: 1.6; }
+  @media (max-width: 680px) {
+    .hero { display: block; padding-top: 2.6rem; }
+    .hero-shot { width: 190px; margin: 2rem auto 0; }
+    h1 { font-size: 1.8rem; }
+    .lede { font-size: 1.1rem; }
+    .shots { flex-direction: column; gap: 2rem; }
+    .shots figure { max-width: 240px; }
+  }
+</style>
+</head>
+<body>
+<main>
+  <header><a class="wordmark" href="/">Hackney Hackers</a></header>
+
+  <div class="hero">
+    <div class="hero-text">
+      <img class="app-icon" src="/assets/bigger-than-you.png" width="72" height="72" alt="">
+      <h1>Bigger than You</h1>
+      <p><span class="status">On Google Play</span></p>
+      <p class="lede">How big is a blue whale, really? Guess the size of
+      everything, then see the truth side by side.</p>
+      <p>A size comparison game about the scale of everything, from a
+      proton to the edge of the universe. Slide to guess, zoom in on the
+      real size, and see how you measure up.</p>
+      <p>Free. No ads. Works offline.</p>
+      <div class="cta">
+        <a class="cta-go" href="https://play.google.com/store/apps/details?id=app.biggerthanyou">Get it on Google Play</a>
+      </div>
+    </div>
+    <div class="hero-shot">
+      <img src="/assets/bigger-than-you/home.webp" width="540" height="960"
+           alt="The Bigger than You home screen: an eggplant and a banana beside a ruler, with Play and Daily challenge buttons.">
+    </div>
+  </div>
+
+  <section>
+    <h2>Ways to play</h2>
+    <ul class="facts">
+      <li><strong>Guess the scale.</strong> Slide to guess how big something
+      is, then zoom in on the real size. The closer you get, the more
+      points.</li>
+      <li><strong>Bigger or smaller.</strong> Is the next thing bigger or
+      smaller than this one? Keep the streak going.</li>
+      <li><strong>Sort the lineup.</strong> Put five things in order,
+      smallest to largest.</li>
+      <li><strong>Scale yourself.</strong> How many of you tall is a
+      giraffe? Guess sizes against your own height.</li>
+      <li><strong>Daily challenge.</strong> The same five rounds for
+      everyone, every day.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>In the app</h2>
+    <div class="shots">
+      <figure>
+        <img src="/assets/bigger-than-you/guess.webp" width="540" height="960"
+             alt="A round of Guess the scale: how long is a common octopus? The guess is 99 cm, and the answer shows 1 m.">
+        <figcaption>Guess the size, then zoom in on the truth.</figcaption>
+      </figure>
+      <figure>
+        <img src="/assets/bigger-than-you/countries.webp" width="540" height="960"
+             alt="Country sizes: Greenland next to Turkey, with the guess of 2.7 times bigger and the real answer of 2.8 times.">
+        <figcaption>Maps lie. See every country's true size.</figcaption>
+      </figure>
+      <figure>
+        <img src="/assets/bigger-than-you/compare.webp" width="540" height="960"
+             alt="Compare: a person standing next to a giraffe, a T. rex and a blue whale at true scale.">
+        <figcaption>Stand next to anything at true scale.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section>
+    <h2>What is inside</h2>
+    <ul class="facts">
+      <li><strong>Three worlds of sizes.</strong> Earth, from a flea to
+      Mount Everest. Space, from moons to galaxies and the universe itself.
+      Micro, from a grain of pollen down to a proton. Over 3,100 objects,
+      each with a drawing and a fact to read once you know the
+      answer.</li>
+      <li><strong>Three games about countries.</strong> Resize a country
+      until it is as big as it really is, choose which has the higher
+      figure, or rank a handful by population, area and GDP. 155 countries,
+      with figures from the World Bank, the UN and Wikipedia.</li>
+      <li><strong>Compare at true scale.</strong> Pick up to eight things,
+      yourself included, and stand them side by side. Share the comparison
+      as a picture.</li>
+      <li><strong>Your own objects.</strong> Add things with a name and a
+      size, and send a set to friends as a message. They can play it as a
+      quiz before adding it.</li>
+      <li><strong>Challenge a friend.</strong> Send the same rounds with
+      your score to beat. It goes as an ordinary message.</li>
+      <li><strong>Achievements and leaderboards.</strong> 20 achievements,
+      plus the daily challenge and best streaks, with Google Play Games.</li>
+      <li><strong>Nine languages.</strong> English, German, French,
+      Spanish, Portuguese, Japanese, Korean, Vietnamese and Indonesian,
+      following your phone's language.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>The price</h2>
+    <p>Free to download, with no ads and no subscription. Earth and the
+    countries are free to play in every mode. Space and Micro are a
+    one-time unlock, and Google Play shows you the price in your own
+    currency before you buy.</p>
+    <p>No account needed, and the game works with no signal at all.</p>
+    <div class="cta">
+      <a class="cta-go" href="https://play.google.com/store/apps/details?id=app.biggerthanyou">Get it on Google Play</a>
+      <p class="cta-note">Android 8.0 and above.</p>
+    </div>
+  </section>
+
+  <section class="contact">
+    <h2>Contact</h2>
+    <p><a href="mailto:support@hackneyhackers.com">support@hackneyhackers.com</a></p>
+    <p><a href="/bigger-than-you-privacy/">Privacy policy</a></p>
+    <p><a href="/">More from Hackney Hackers</a></p>
+  </section>
+
+  <footer>
+    Hackney Hackers Ltd is registered in England and Wales,
+    company&nbsp;no.&nbsp;17350468.<br>
+    Registered office: 1F Manley Court, London&nbsp;N16&nbsp;0PB.
+  </footer>
+</main>
+</body>
+</html>
