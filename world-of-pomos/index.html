@@ -80,6 +80,8 @@
   .waitlist-note { margin: 0.6rem 0 0; font-size: 0.85rem; color: var(--muted); }
   .waitlist-note[data-state="error"] { color: #8C2F22; }
   .waitlist-note[data-state="success"] { color: var(--teal); font-weight: 600; }
+  .waitlist-privacy { margin: 0.4rem 0 0; font-size: 0.8rem; color: var(--muted);
+                      line-height: 1.5; }
   /* Off-screen, not display:none — a bot fills it, a screen reader skips it. */
   .hp { position: absolute; left: -9999px; width: 1px; height: 1px;
         overflow: hidden; }
@@ -134,6 +136,12 @@
         I will write once, when it opens. Nothing else, ever.
       </p>
     </form>
+    <!-- The privacy notice at the point of collection. Kept apart from
+         #pomos-waitlist-note, which the script rewrites on every submit. -->
+    <p class="waitlist-privacy">Your address is kept by Hackney Hackers Ltd in
+    Google Firebase, used only for that one email, and never shared or sold.
+    To have it removed at any time, write to
+    <a href="mailto:support@hackneyhackers.com">support@hackneyhackers.com</a>.</p>
   </section>
 
   <section class="contact">
