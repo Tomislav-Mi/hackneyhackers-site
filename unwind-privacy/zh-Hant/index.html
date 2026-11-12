@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Unwind 隱私權政策</title>
+<link rel="icon" href="/assets/unwind.svg" type="image/svg+xml">
+<link rel="icon" href="/assets/unwind-favicon-32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="/assets/unwind-apple-touch-icon.png">
+<style>
+  body { margin: 0; background: #F5F4F2; color: #0B0B0B;
+         font: 18px/1.65 'Instrument Sans', ui-sans-serif, system-ui,
+               -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif; }
+  main { max-width: 42rem; margin: 0 auto; padding: 3rem 1.25rem 5rem; }
+  h1 { color: #267F53; font-size: 2rem; line-height: 1.2;
+       letter-spacing: -0.015em; }
+  h2 { color: #267F53; font-size: 1.3rem; margin-top: 2.2rem;
+       letter-spacing: -0.01em; }
+  code { font-size: 0.85em; background: #FDEDD4; padding: 0.1em 0.35em;
+         border-radius: 4px; }
+  li { margin: 0.45em 0; }
+  a { color: #267F53; }
+  footer { margin-top: 3rem; color: #5A5A57; font-size: 0.85em; }
+  .lang { margin: 0; text-align: right; font-size: 0.85em; color: #5A5A57; }
+  .lang a { color: #5A5A57; }
+  /* Japanese in the phone's own Japanese face, a little more open. */
+  html:lang(ja) body { font-family: ui-sans-serif, system-ui, -apple-system,
+         'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Noto Sans JP',
+         'Yu Gothic', Meiryo, sans-serif; line-height: 1.85; }
+  html:lang(ja) h1, html:lang(ja) h2 { letter-spacing: 0; }
+  /* Korean in the phone's own Korean face, broken at spaces, as Korean is. */
+  html:lang(ko) body { font-family: ui-sans-serif, system-ui, -apple-system,
+         'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', sans-serif;
+         line-height: 1.8; word-break: keep-all; }
+  html:lang(ko) h1, html:lang(ko) h2 { letter-spacing: 0; }
+  html:lang(zh-Hant) body { font-family: ui-sans-serif, system-ui, -apple-system,
+         'PingFang TC', 'Noto Sans TC', 'Microsoft JhengHei', sans-serif;
+         line-height: 1.85; }
+  html:lang(zh-Hant) h1, html:lang(zh-Hant) h2 { letter-spacing: 0; }
+</style>
+</head>
+<body>
+<main>
+<p class="lang"><a href="/unwind-privacy/" hreflang="en" lang="en">English</a> · <a href="/unwind-privacy/de/" hreflang="de" lang="de">Deutsch</a> · <a href="/unwind-privacy/ja/" hreflang="ja" lang="ja">日本語</a> · <a href="/unwind-privacy/ko/" hreflang="ko" lang="ko">한국어</a> · <a href="/unwind-privacy/es/" hreflang="es" lang="es">Español</a> · <a href="/unwind-privacy/fr/" hreflang="fr" lang="fr">Français</a> · <a href="/unwind-privacy/pt/" hreflang="pt" lang="pt">Português</a> · <a href="/unwind-privacy/id/" hreflang="id" lang="id">Bahasa Indonesia</a> · <a href="/unwind-privacy/it/" hreflang="it" lang="it">Italiano</a> · <a href="/unwind-privacy/tr/" hreflang="tr" lang="tr">Türkçe</a> · <a href="/unwind-privacy/pl/" hreflang="pl" lang="pl">Polski</a> · <a href="/unwind-privacy/vi/" hreflang="vi" lang="vi">Tiếng Việt</a> · <a href="/unwind-privacy/th/" hreflang="th" lang="th">ไทย</a></p>
+<h1>Unwind 隱私權政策</h1>
+<p><strong>生效日期：2026年11月10日</strong></p>
+<p>Unwind 是一款 Android App，在會讓你分心的 App 開啟之前，請你先用手指沿著線條描一遍。這份政策用簡單的話，說明 App 會怎麼處理資訊，以及有哪些事不會做。簡單來說：<strong>Unwind 沒有伺服器，也沒有帳號，我們寫的程式碼也不會開啟任何網路連線。所以 App 記錄下來關於你的任何資料，App 從來不會傳到任何地方。</strong>App 記錄的內容存在你的手機上。只有在 Android 的備份把這些內容複製過去時，它們才會存到你自己的 Google 帳號裡。App 要靠 Google 的結帳程式庫才能販售自己，這個程式庫會把它自己的診斷資料傳給 Google，但裡面完全不含 Unwind 記錄的任何內容。</p>
+<h2>無障礙服務</h2>
+<p>App 鎖是透過 Android 的無障礙服務運作的。當你切換 App 時，Android 會通知這項服務：有一個視窗來到了最前面。這則通知帶有<strong>目前畫面上那個 App 的技術名稱</strong>（例如 <code>com.instagram.android</code>），以及視窗標題之類的細節。服務會讀取 App 的名稱，其餘的都忽略。</p>
+<ul><li>服務會在你的手機上，把這個名稱和你選擇鎖定的 App 清單比對。如果相符，描線畫面就會開啟。</li><li>它只讀取 App 的套件名稱，<strong>不讀取畫面內容、文字、訊息、密碼，也不讀取螢幕截圖</strong>。這項服務設定了 <code>canRetrieveWindowContent=&quot;false&quot;</code>，所以它無法查看任何視窗裡面的內容。它也只接收一種事件：有視窗來到最前面。</li><li>手機鎖定時，或 Android 回報有來電正在響、或正在通話時，它不會開啟描線畫面。為了知道這些，它會詢問 Android：手機是否已鎖定，以及手機的聲音是否設定為通話模式。這兩個答案的任何內容，都不會被儲存，也不會被傳送。</li><li>如果你解鎖手機後，進入的是你劃掉的 App，描線畫面會在鎖定畫面消失後開啟。劃掉的 App 有來電或鬧鐘顯示在鎖定畫面上時，也是一樣。直接用鎖定畫面上的按鈕接聽，描線畫面就不會來打擾，因為接起來的電話就是正在通話中。</li><li>這個名稱從來不會被傳到任何地方。根本沒有「任何地方」可傳：App 沒有伺服器，我們寫的程式碼也不會開啟網路連線。</li></ul>
+<p>為了讓描一次線就涵蓋一次使用，服務在執行期間，還會在記憶體裡保留兩樣東西。一是<strong>你現在所在的 App 名稱</strong>：只有一個名稱，你換到另一個 App 時就會被取代。二是<strong>一個標記，表示你已經為某個 App 描過線</strong>：只要你一直待在那個 App 裡，這個標記就會一直保留。在那個 App 裡打開鍵盤、相片選擇器或系統對話框，都不需要再描一次。離開去別的 App、回到手機的主畫面，或讓螢幕暗下來，標記就會結束，回來時要再描一次線。中途到 Unwind 本身看看，例如打開別人傳給你的卡片，標記不會結束。從 Unwind 的設定、用你劃掉的瀏覽器開啟這份政策時，不用描線也會留下同樣的標記，而這個標記也會以同樣的方式結束。</p>
+<p>為了讓你解鎖手機後進入劃掉的 App 時，仍然需要描線，手機鎖定期間，服務還會多保留一樣東西：<strong>哪個劃掉的 App 在鎖定畫面背後來到了最前面，以及是在什麼時候</strong>。服務會在你解鎖手機，或螢幕暗下來時，忘掉這項資訊。</p>
+<p>為了分辨「你切換到了另一個 App」和「你原本所在的 App 上方打開了鍵盤」，服務會詢問 Android：你安裝的 App 中，哪些是啟動器，哪些是鍵盤，哪些在手機的主畫面上有圖示。這些清單描述的是你手機上的 App，而不是你。每次服務啟動時，都會重新整理出這些清單。</p>
+<p><strong>以上這些都不會寫入儲存空間，也都不會離開手機。</strong>它們只存在於執行中 App 的記憶體裡，服務一停止就會消失。</p>
+<p>這項服務要在 App 說明之後，由你自己到 Android 的無障礙設定中開啟。你也可以隨時在那裡關閉它。</p>
+<h2>App 在手機上儲存的資料</h2>
+<p>以下所有資料，都存在你裝置上 App 的私人儲存空間裡，一個名為 <code>unwind.db</code> 的資料庫中。只有兩項小資訊例外，各自存在 App 自己的一個小設定檔裡：你是否買了這個 App，以及 App 上次請 Google Play 顯示評分視窗是什麼時候。我們沒有任何副本，也沒有辦法讀取這些資料。</p>
+<ul><li><strong>你選擇鎖定的 App</strong>：每個 App 的套件名稱、Android 為它顯示的名稱、你選的模式，以及你加入它的時間。</li><li><strong>你的設定</strong>：你是否已完成新手導覽、封鎖的總開關、線條粗細、牆面的聲音與它的樂器，以及 App 使用的外觀。</li><li><strong>你的牌組</strong>：你畫的或收到的每一張卡片，都會記下名稱、顏色、筆畫本身（記成一串點）、是你畫的還是別人傳來的，以及它加入牌組的時間。</li><li><strong>你的等待日記</strong>：你每描一條線，就記下一筆，包括那是哪一幅圖或哪一張卡片、你描的時間，以及<strong>當時是哪一個鎖定的 App 在描線畫面後面等著</strong>。這是一份你何時打開了你選擇鎖定的 App 的歷史記錄。保留這份記錄，是為了讓這些圖能淡淡地重新畫在 Unwind 的主畫面上，而 App 從來不會把這份記錄傳到任何地方。</li><li><strong>你是否買了這個 App</strong>，或還在免費試用期間，以及試用期的開始和結束時間。</li><li><strong>App 上次請 Google Play 顯示評分視窗的時間</strong>，這樣 App 每四個月最多只會請求一次。</li></ul>
+<p><strong>更新前保留的副本：</strong>當某次更新即將改變資料庫的結構時，App 會先把資料庫原封不動地複製一份，存到同一個私人儲存空間裡。這樣萬一那次更新出了差錯，之後的更新還能把你的資料放回來。副本保存的是資料庫在那個當下的內容，會留在你的手機上，也不屬於 Android 的備份。App 會保留最近三次這類更新的副本，更早的副本則會刪除。你在 App 裡刪除的東西（例如一張卡片），可能還留在刪除之前建立的副本裡，直到那份副本也被刪除為止。</p>
+<p><strong>刪除資料：</strong>解除安裝 App，或在 Android 的設定中清除它的儲存空間，就會把以上所有資料從手機上永久刪除，副本也包括在內。但這不會刪除 Android 的備份在你的 Google 帳號中建立的副本（見下文）。那份副本可能會一直保留，你重新安裝 App 時也可能被還原，直到它過期，或你在 Google 帳號的備份設定中刪除它為止。</p>
+<h2>Android 自己的備份</h2>
+<p>這個 App 允許 Android 的標準備份。也就是說，上面列出的所有資料（你選擇鎖定的 App、你的設定、你的牌組、你的等待日記、免費試用的日期、你是否買了這個 App，以及 App 上次請求評分視窗的時間），都可能會被複製到<strong>你自己 Google 帳號的應用程式備份</strong>中，並在你設定新手機或重新安裝 App 時還原。使用 Android 的手機對手機轉移功能換到新手機時，也會把同樣的資料複製過去。這項備份是 Android 的功能，發生在你和 Google 之間，適用 Google 的隱私權政策。備份不會送到我們這裡，我們也無法讀取。你可以在 Android 的系統設定中，關閉整支手機或只關閉這個 App 的應用程式備份。</p>
+<h2>哪些東西會用到網路</h2>
+<p><strong>我們寫的程式碼，沒有任何一段會用到網路。</strong>我們為 Unwind 寫的程式碼，沒有任何部分會開啟網路連線：沒有分析工具，沒有當機回報，也沒有我們自己的伺服器可以連線。每一條線條、每一張卡片和每一幅圖，都是在手機上產生或讀取的。</p>
+<p>不過，圍繞著這一點，有四件事值得說清楚。因為你可以自己查證，而且你應該先在這裡聽我們說。</p>
+<ol><li><strong>完成的 App 確實帶有 <code>INTERNET</code> 權限</strong>，還有 <code>ACCESS_NETWORK_STATE</code>。也因為這樣，Play 的商店資訊會顯示「完整網路存取權」。這兩個權限都不是我們要求的。它們包含在 Google Play 結帳程式庫裡，而這個程式庫還會一併帶進 Google 的一個診斷元件。任何程式庫宣告的權限，都會成為整個 App 宣告的權限。我們其實寧可不要這樣。要拿掉這個權限，就得拿掉結帳程式庫的一部分。在我們證明這樣做不會讓購買 App 出問題之前，我們不會發布那樣的版本。</li><li><strong>這個程式庫確實會使用網路，用於它自己的診斷。</strong>App 需要這個程式庫才能販售自己，每次你打開 App 時，App 都會用它向 Google Play 確認你是否已經購買。這個程式庫會把它自己的診斷資料傳給 Google，說明這些確認進行得如何，並附上裝置的細節：裝置型號和 Android 版本號碼、裝置設定的國家、語言和時區、行動電信業者的代碼、正在使用的網路類型，以及正在執行的 Unwind 和程式庫版本。這些資料是送到 Google，不是送到我們這裡，並適用 Google 的隱私權政策。裡面完全不含 Unwind 記錄的任何內容：沒有你鎖定的 App，沒有你的等待日記，也沒有你的牌組。</li><li><strong>Google Play 上的購買</strong>是由 Google Play 處理的，在 Google 自己的 App 和 Google 的伺服器上進行。付款資料會送到 Google，絕不會送到我們這裡。Unwind 只會知道「已購買」或「未購買」，並把這個結果存在手機上。這筆交易適用 Google 的隱私權政策。</li><li><strong>Google Play 的評分視窗。</strong>當你的等待日記裡有了兩個不同日子的線條，App 可能會在一條新的線條剛在 Unwind 的主畫面上就位後，請 Google Play 顯示它自己的視窗，讓你為 App 評分。App 每四個月最多只會這樣請求一次。視窗會不會出現，由 Google Play 決定。你在那裡選的星等或寫下的文字，都會依照 Google 的條款，作為你的評論送到 Google Play，絕不會送到我們這裡。App 不會得知你有沒有評分、寫了什麼，App 本身也不會傳送任何東西。</li></ol>
+<p>但這些都改變不了最重要的部分。你鎖定的 App、你的等待日記和你的牌組，都是寫進這支手機的私人儲存空間，也從那裡讀回來，這個 App 裡沒有任何一行程式碼，會把其中任何一樣傳到任何地方。唯一可能離開手機的副本，是上面說明過的、Android 自己的備份所建立的那一份。</p>
+<h2>傳送卡片</h2>
+<p>你可以把自己畫的卡片傳給別人。傳送時，App 會把那一張卡片寫進一個暫存檔案，交給 Android 的分享選單，然後由<strong>你</strong>決定要傳到哪裡。檔案裡只有那幅圖和它的名稱，沒有任何關於你、你的手機或你鎖定的 App 的資訊。App 從不自行分享任何東西，分享的也絕不會超過你選的那一張卡片。</p>
+<h2>App 不會做的事</h2>
+<ul><li>沒有帳號，也不用登入。</li><li>沒有我們的分析工具，沒有我們的追蹤器，沒有廣告，也沒有廣告 SDK。Google 的結帳程式庫帶有它自己的診斷功能，請參閱上面的「哪些東西會用到網路」。</li><li>不販售、也不分享個人資料，我們的程式碼也不會傳送任何個人資料。Unwind 根本沒有可以接收這些資料的伺服器。</li><li>不讀取通知、訊息或畫面內容。</li><li>不取用位置資訊、聯絡人、相機或麥克風。</li></ul>
+<h2>完整的權限清單</h2>
+<p>Unwind 要求的權限有三個：</p>
+<ul><li><strong>無障礙服務</strong>：前面已經說明過，App 鎖要靠它才能運作。</li><li><strong>震動</strong>：描線時，會用輕輕的震動回應你的指尖。</li><li><strong>Google Play 結帳服務</strong>：讓 Google Play 處理一次性的購買。</li></ul>
+<p>另外有三個權限，是跟著 App 所使用的程式庫一起來的。Android 會把它們合併到完成的 App 裡，就像是 App 自己要求的一樣，所以它們也是 App 的權限，也列在這裡：</p>
+<ul><li><strong>完整網路存取權</strong>和<strong>查看網路連線</strong>：來自 Google Play 結帳程式庫，前面已經說明過。我們寫的程式碼不會使用其中任何一個，是程式庫用它們來做自己的診斷。</li><li><strong>一個私人的接收器權限</strong>：以 App 本身的名稱命名，由一個 Android 支援程式庫建立，讓 Unwind 內部使用的某個廣播無法被其他 App 接觸到。這個權限不會授予任何人任何東西。</li></ul>
+<p>還有一個，是 Google Play 在它提供給你的那份 App 中加上的：</p>
+<ul><li><strong>檢查授權</strong>（<code>com.android.vending.CHECK_LICENSE</code>）：屬於 Google Play 自動防護的一部分。它會透過 Play 商店 App 檢查你手機上的這份 App 是否是從 Google Play 安裝的。這是 Google 的程式碼，不是 Unwind 的，Unwind 建置出來的 App 裡沒有它，它也和 Unwind 記錄的任何內容都無關。</li></ul>
+<p>以上就是完整的清單。前六個權限不是憑記憶寫在這裡的，而是在每一次正式版建置時，都會和完成的 App 核對。最後一個是 App 上傳後才由 Google Play 加上的，任何建置都看不到它，所以每次發布時，都會和 Play Console 回報的內容核對。</p>
+<h2>兒童</h2>
+<p>Unwind 是為成人設計的，並非以未滿 13 歲的兒童為對象。不論年齡，Unwind 記錄的任何內容都不會被收集。唯一會從 App 收集的資料，是結帳程式庫關於手機的診斷資料，這在「哪些東西會用到網路」中說明過，而且這些資料是送到 Google。</p>
+<h2>這份政策的變更</h2>
+<p>如果 App 開始做這份政策沒有涵蓋的事，這份政策會先更新，上方的生效日期也會跟著改變。在 App 的設定中，「隱私權政策」會連到最新的版本。</p>
+<h2>聯絡我們</h2>
+<p>有關隱私權的問題：<strong>support@hackneyhackers.com</strong></p>
+<footer>本頁由 <code>store/play/build-privacy-page.py</code> 從 <code>docs/PRIVACY.zh-Hant.md</code> 產生。請編輯 Markdown，而不是這個檔案。</footer>
+</main>
+</body>
+</html>
