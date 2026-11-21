@@ -20,7 +20,9 @@
       Helvetica, Arial, sans-serif;
   }
   main { max-width: 41rem; margin: 0 auto; padding: 0 1.25rem; }
-  header { padding: 2.2rem 0 0; }
+  header { padding: 2.2rem 0 0; display: flex; justify-content: space-between;
+           align-items: baseline; }
+  header nav a { font-size: 0.95rem; }
   .wordmark { font-weight: 700; letter-spacing: 0.02em; color: var(--teal); }
   .hero { padding: 4.5rem 0 3.5rem; border-bottom: 1px solid var(--line); }
   h1 { font-size: 2.3rem; line-height: 1.2; margin: 0 0 0.9rem;
@@ -55,7 +57,8 @@
 </head>
 <body>
 <main>
-  <header><span class="wordmark">Hackney Hackers</span></header>
+  <header><span class="wordmark">Hackney Hackers</span>
+    <nav><a href="/about/">About</a></nav></header>
 
   <div class="hero">
     <h1>A small software studio in Hackney, London.</h1>
