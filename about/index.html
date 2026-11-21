@@ -10,6 +10,10 @@
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <style>
+  /* Reenie Beanie (James Grieshaber, SIL Open Font License, licence beside
+     the file) for the girl's words: a light hand, as if she wrote them. */
+  @font-face { font-family: "Reenie Beanie"; font-style: normal; font-weight: 400;
+    font-display: swap; src: url(/assets/fonts/reenie-beanie-latin.woff2) format("woff2"); }
   /* The house skeleton shared with / : same palette, measure and rules. */
   :root {
     --paper: #FAFAF7; --ink: #17201F; --muted: #5C6663;
@@ -31,7 +35,8 @@
   .hero p { color: var(--muted); max-width: 34rem; margin: 0; }
   /* The canvas keeps the artboard's shape; the script sizes its pixels. */
   .scene { margin: 2.4rem 0 0; }
-  .stage { position: relative; max-width: 30rem; margin: 0 auto; }
+  .stage { position: relative; max-width: 30rem; margin: 0 auto;
+           container-type: inline-size; }
   #girl-and-dog { display: block; width: 100%; aspect-ratio: 1 / 1;
                   border-radius: 16px; }
   /* The flower is laid over the scene in fractions of its width, so it
@@ -43,6 +48,17 @@
   #flower { position: absolute; left: 51.2%; top: 0; width: 33%;
             aspect-ratio: 1 / 1; cursor: pointer;
             -webkit-tap-highlight-color: transparent; }
+  /* What the girl says when the flower dances: handwriting in the scene's
+     navy, sized with the scene (cqw). Each word is flown out of
+     her head by the script below. */
+  .stage .speech { position: absolute; left: 12%; top: 23%; margin: 0;
+            font-family: "Reenie Beanie", cursive;
+            font-weight: 400; letter-spacing: 0.03em;
+            font-size: max(4.1cqw, 1rem); line-height: 1.25; color: #222D46;
+            white-space: nowrap; pointer-events: none;
+            transition: opacity 0.6s ease; }
+  .speech.out { opacity: 0; }
+  .speech span { display: inline-block; opacity: 0; will-change: transform; }
   /* The credit the licences ask for sits behind this button, in the
      artboard's corner, so the drawing stands on its own until asked.
      Only faint text is drawn; the transparent 44px box around it keeps it
@@ -88,6 +104,7 @@
         <canvas id="girl-and-dog" width="480" height="480"
           role="img" aria-label="An animated line drawing of a girl sitting beside her dog"></canvas>
         <canvas class="stem" id="stem" aria-hidden="true"></canvas>
+        <p class="speech" id="speech" lang="de" aria-live="polite" hidden></p>
         <canvas id="flower" width="160" height="160"
           role="img" aria-label="A flower whose head dances when you press it"></canvas>
         <button class="info" type="button" aria-expanded="false"
@@ -176,6 +193,80 @@
       { t: 0.25, path: new Path2D('M0 0 C -31 -21, -63 -66, -67 -114 C -31 -98, -5 -56, 0 0') },
       { t: 0.42, path: new Path2D('M0 0 C 29 -30, 63 -90, 67 -158 C 37 -130, 5 -70, 0 0') }
     ];
+    // The girl's answer to the flower. Each word is born small at the top
+    // of her head and swept out on its own S-curve: up and away from her
+    // head first, then round to come into its place from below, growing to
+    // full size as it travels. Words leave one after another, a beat longer
+    // after a full stop; the line holds, then fades.
+    var WORDS = ['Netter', 'Versuch,', 'Tomi.', '\n', 'Danke,', 'aber', 'nein,', 'danke.'];
+    var HEAD = [492, 418];   // the top of the girl's head, in scene units
+    var FLIGHT = 1100;       // ms for one word's journey
+    var speaking = false;
+    function bezier(p, t) {
+      var u = 1 - t;
+      return [0, 1].map(function (k) {
+        return u*u*u*p[0][k] + 3*u*u*t*p[1][k] + 3*u*t*t*p[2][k] + t*t*t*p[3][k];
+      });
+    }
+    function easeInOut(t) { return t < 0.5 ? 4*t*t*t : 1 - Math.pow(-2*t + 2, 3) / 2; }
+    function easeOut(t) { return 1 - Math.pow(1 - t, 3); }
+    function fly(span, stage, delay) {
+      var s = stage.getBoundingClientRect(), r = span.getBoundingClientRect();
+      var u = s.width / 1080;
+      // From the head to the word's own place, measured from that place.
+      var dx = HEAD[0] * u - (r.left - s.left + r.width / 2);
+      var dy = HEAD[1] * u - (r.top - s.top + r.height / 2);
+      // An S along the line from head to home: the first bend swings out
+      // up and to the right of that line, the second back across it, so
+      // the word comes in to its place from below and to the left.
+      var cx = -dx, cy = -dy, len = Math.hypot(cx, cy) || 1;
+      var nx = -cy / len, ny = cx / len;            // across the line
+      if (ny > 0) { nx = -nx; ny = -ny; }           // first bend upward
+      var bend = len * 0.6;
+      var path = [[dx, dy],                                             // her head
+                  [dx + cx / 3 + nx * bend, dy + cy / 3 + ny * bend],
+                  [dx + cx * 2 / 3 - nx * bend, dy + cy * 2 / 3 - ny * bend],
+                  [0, 0]];                                              // home
+      var frames = [];
+      for (var i = 0; i <= 24; i++) {
+        var t = i / 24, q = bezier(path, easeInOut(t));
+        frames.push({
+          transform: 'translate(' + q[0].toFixed(1) + 'px,' + q[1].toFixed(1) + 'px) scale(' +
+            (0.15 + 0.85 * easeOut(t)).toFixed(3) + ')',
+          opacity: Math.min(1, t * 4)
+        });
+      }
+      span.animate(frames, { duration: FLIGHT, delay: delay, fill: 'both' });
+    }
+    function say() {
+      if (speaking) return;
+      speaking = true;
+      var el = document.getElementById('speech');
+      var stage = el.parentNode;
+      el.textContent = '';
+      el.classList.remove('out');
+      var spans = [];
+      WORDS.forEach(function (w) {
+        if (w === '\n') { el.appendChild(document.createElement('br')); return; }
+        var span = document.createElement('span');
+        span.textContent = w;
+        el.appendChild(span);
+        el.appendChild(document.createTextNode(' '));
+        spans.push(span);
+      });
+      el.hidden = false;
+      var t = 0;
+      spans.forEach(function (span) {
+        if (still) span.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 400, fill: 'both' });
+        else fly(span, stage, t);
+        t += /[.]$/.test(span.textContent) ? 520 : 230;
+      });
+      var done = (still ? 400 : t + FLIGHT) + 2200;
+      setTimeout(function () {
+        el.classList.add('out');
+        setTimeout(function () { el.hidden = true; speaking = false; }, 650);
+      }, done);
+    }
     function sway() {
       var scene = document.getElementById('girl-and-dog');
       var sceneCtx = scene.getContext('2d');
@@ -192,7 +283,8 @@
         });
       }
       // Where the bush's outline crosses the stem, in scene units: the first
-      // dark pixel looking up the scene's column from just above the ground.
+      // navy pixel looking up the scene's column from just above the ground
+      // (darker than any fill the scene colours in to).
       // The bush has no fill, so the stem is cut off there instead of
       // showing through it; read every frame, it follows the bush's sway.
       var last = 640;
@@ -201,7 +293,7 @@
         var y0 = Math.round(560 * k), y1 = Math.round(676 * k);
         var d = sceneCtx.getImageData(x, y0, 1, y1 - y0).data;
         for (var j = d.length / 4 - 1; j >= 0; j--) {
-          if (d[j * 4 + 3] > 40 && d[j * 4] < 160) return (last = (y0 + j) / k);
+          if (d[j * 4 + 3] > 40 && d[j * 4] < 90) return (last = (y0 + j) / k);
         }
         return last;   // a frame where the line was missed: keep the last place
       }
@@ -251,6 +343,18 @@
       autoplay: !still,
       layout: new rive.Layout({ fit: rive.Fit.Contain }),
       onLoad: function () { f.resizeDrawingSurfaceToCanvas(); }
+    });
+    // When the flower starts its dance, the scene colours in and she
+    // answers it; when the dance ends, the colour drains away again. The
+    // two colour animations live in girl-and-dog.riv and play alongside
+    // its own.
+    f.on(rive.EventType.StateChange, function (e) {
+      var states = e.data || [];
+      if (states.indexOf('DanceStart') !== -1) {
+        r.play('ColourIn');
+        setTimeout(say, 500);
+      }
+      if (states.indexOf('DanceEnd') !== -1) r.play('ColourOut');
     });
     // With less motion asked for, nothing runs until the head is pressed:
     // this capture listener starts the machine just before Rive sees the press.
