@@ -57,6 +57,7 @@
             font-size: max(4.1cqw, 1rem); line-height: 1.25; color: #222D46;
             white-space: nowrap; pointer-events: none;
             transition: opacity 0.6s ease; }
+  .stage #flower-speech { left: 25%; top: 7%; }   /* beside the flower's head */
   .speech.out { opacity: 0; }
   .speech span { display: inline-block; opacity: 0; will-change: transform; }
   /* The credit the licences ask for sits behind this button, in the
@@ -104,9 +105,11 @@
         <canvas id="girl-and-dog" width="480" height="480"
           role="img" aria-label="An animated line drawing of a girl sitting beside her dog"></canvas>
         <canvas class="stem" id="stem" aria-hidden="true"></canvas>
-        <p class="speech" id="speech" lang="de" aria-live="polite" hidden></p>
+        <p class="speech" id="speech" aria-live="polite" hidden></p>
+        <p class="speech" id="flower-speech" lang="de" aria-live="polite" hidden></p>
         <canvas id="flower" width="160" height="160"
           role="img" aria-label="A flower whose head dances when you press it"></canvas>
+        <canvas class="stem" id="beams" aria-hidden="true"></canvas>
         <button class="info" type="button" aria-expanded="false"
           aria-controls="credit" aria-label="Animation credit and licence">CC</button>
       </div>
@@ -189,19 +192,25 @@
     // behind the bush at its foot; the leaves are drawn from their base.
     var LINE = 0.65;      // the scene's own line: about 0.6 device px at 480 px
     var INK = '#222D46';  // the scene's line colour, recoloured for the light page
+    var LEAF = '#8DA66B';  // the Autumn palette's olive, as the bushes
+    var leafFill = { from: 0, to: 0, t0: 0 };
+    function setLeaves(to) {
+      leafFill = { from: leafAmount(performance.now()), to: to, t0: performance.now() };
+    }
+    function leafAmount(now) {   // fades over 0.6 s, as the scene's own colour
+      var u = Math.min(1, (now - leafFill.t0) / 600);
+      return leafFill.from + (leafFill.to - leafFill.from) * u;
+    }
     var LEAVES = [
       { t: 0.25, path: new Path2D('M0 0 C -31 -21, -63 -66, -67 -114 C -31 -98, -5 -56, 0 0') },
       { t: 0.42, path: new Path2D('M0 0 C 29 -30, 63 -90, 67 -158 C 37 -130, 5 -70, 0 0') }
     ];
-    // The girl's answer to the flower. Each word is born small at the top
-    // of her head and swept out on its own S-curve: up and away from her
-    // head first, then round to come into its place from below, growing to
-    // full size as it travels. Words leave one after another, a beat longer
-    // after a full stop; the line holds, then fades.
-    var WORDS = ['Netter', 'Versuch,', 'Tomi.', '\n', 'Danke,', 'aber', 'nein,', 'danke.'];
+    // Speech. Each word is born small where the speaker's voice comes from
+    // and swept out on its own S-curve: up and away first, then round to
+    // come into its place from below, growing to full size as it travels.
+    // Words leave one after another, a beat longer after a full stop.
     var HEAD = [492, 418];   // the top of the girl's head, in scene units
     var FLIGHT = 1100;       // ms for one word's journey
-    var speaking = false;
     function bezier(p, t) {
       var u = 1 - t;
       return [0, 1].map(function (k) {
@@ -210,23 +219,22 @@
     }
     function easeInOut(t) { return t < 0.5 ? 4*t*t*t : 1 - Math.pow(-2*t + 2, 3) / 2; }
     function easeOut(t) { return 1 - Math.pow(1 - t, 3); }
-    function fly(span, stage, delay) {
+    function fly(span, stage, delay, from) {
       var s = stage.getBoundingClientRect(), r = span.getBoundingClientRect();
       var u = s.width / 1080;
-      // From the head to the word's own place, measured from that place.
-      var dx = HEAD[0] * u - (r.left - s.left + r.width / 2);
-      var dy = HEAD[1] * u - (r.top - s.top + r.height / 2);
-      // An S along the line from head to home: the first bend swings out
-      // up and to the right of that line, the second back across it, so
-      // the word comes in to its place from below and to the left.
+      // From the speaker to the word's own place, measured from that place.
+      var dx = from[0] * u - (r.left - s.left + r.width / 2);
+      var dy = from[1] * u - (r.top - s.top + r.height / 2);
+      // An S along the line from speaker to home: the first bend swings out
+      // upward of that line, the second back across it.
       var cx = -dx, cy = -dy, len = Math.hypot(cx, cy) || 1;
       var nx = -cy / len, ny = cx / len;            // across the line
       if (ny > 0) { nx = -nx; ny = -ny; }           // first bend upward
       var bend = len * 0.6;
-      var path = [[dx, dy],                                             // her head
+      var path = [[dx, dy],
                   [dx + cx / 3 + nx * bend, dy + cy / 3 + ny * bend],
                   [dx + cx * 2 / 3 - nx * bend, dy + cy * 2 / 3 - ny * bend],
-                  [0, 0]];                                              // home
+                  [0, 0]];
       var frames = [];
       for (var i = 0; i <= 24; i++) {
         var t = i / 24, q = bezier(path, easeInOut(t));
@@ -238,15 +246,16 @@
       }
       span.animate(frames, { duration: FLIGHT, delay: delay, fill: 'both' });
     }
-    function say() {
-      if (speaking) return;
-      speaking = true;
-      var el = document.getElementById('speech');
+    // Says a line into one of the speech paragraphs, from a point in scene
+    // units; returns the ms until its last word has landed.
+    function speak(id, words, from, lang) {
+      var el = document.getElementById(id);
       var stage = el.parentNode;
       el.textContent = '';
+      el.lang = lang;
       el.classList.remove('out');
       var spans = [];
-      WORDS.forEach(function (w) {
+      words.forEach(function (w) {
         if (w === '\n') { el.appendChild(document.createElement('br')); return; }
         var span = document.createElement('span');
         span.textContent = w;
@@ -255,26 +264,487 @@
         spans.push(span);
       });
       el.hidden = false;
-      var t = 0;
+      var t = 0, last = 0;
       spans.forEach(function (span) {
         if (still) span.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 400, fill: 'both' });
-        else fly(span, stage, t);
-        t += /[.]$/.test(span.textContent) ? 520 : 230;
+        else fly(span, stage, t, from);
+        last = t;
+        t += /[.?]$/.test(span.textContent) ? 520 : 230;
       });
-      var done = (still ? 400 : t + FLIGHT) + 2200;
-      setTimeout(function () {
+      return still ? 400 : last + FLIGHT;
+    }
+    // Where the flower's voice comes from: the middle of its face.
+    function flowerMouth() {
+      var fc = document.getElementById('flower'), u = 1080 / fc.parentNode.clientWidth;
+      return [(fc.offsetLeft + fc.clientWidth * 0.62) * u, (fc.offsetTop + fc.clientHeight * 0.48) * u];
+    }
+    function hideWords() {
+      ['speech', 'flower-speech'].forEach(function (id) {
+        var el = document.getElementById(id);
+        if (el.hidden) return;
         el.classList.add('out');
-        setTimeout(function () { el.hidden = true; speaking = false; }, 650);
-      }, done);
+        setTimeout(function () { if (el.classList.contains('out')) el.hidden = true; }, 650);
+      });
+    }
+
+    // The four rounds, in turn with each press of the flower.
+    // Round 1: she answers it, then her beams.
+    function roundOne() {
+      var landed = speak('speech',
+        ['Netter', 'Versuch,', 'Tomi.', '\n', 'Danke,', 'aber', 'nein,', 'danke.'], HEAD, 'de');
+      // With less motion asked for there are no beams: the line holds, then
+      // the scene goes back as it was.
+      if (still) later(endDance, landed + 2200);
+      else later(function () { fireBeams(1); }, landed + 700);
+    }
+    // Round 2: the flower tries again, dancing wildly; she answers in one
+    // word and fires harder.
+    function roundTwo() {
+      var landed = speak('flower-speech', ['Wie', 'wärs', 'hiermit?'], flowerMouth(), 'de');
+      later(function () { setLively(1); }, landed + 150);
+      later(function () {
+        var nope = speak('speech', ['Nope.'], HEAD, 'en');
+        if (still) later(endDance, nope + 2000);
+        else later(function () { fireBeams(2); }, nope + 250);
+      }, landed + 1400);
+    }
+
+    // Round 3: the flower puts on a string tanga and tries once more; she
+    // answers and fires hardest of all, and the beams leave their mark.
+    function roundThree() {
+      setTanga(1);
+      setLively(0.55);
+      var landed = speak('flower-speech', ['Kannst', 'du', 'dem', '\n', 'widerstehen?'], flowerMouth(), 'de');
+      later(function () {
+        var easy = speak('speech', ['Mit', 'Leichtigkeit.'], HEAD, 'de');
+        if (still) later(endDance, easy + 2000);
+        else later(function () { fireBeams(3); }, easy + 250);
+      }, landed + 1300);
+    }
+
+    // Round 4, the last: the flower turns round once more and starts
+    // "Hey, Babe …"; she doesn't let it finish. Her ultimate beam is as wide
+    // as the flower's head and burns it away to ash; the stem and leaves stay.
+    function roundFour() {
+      setLively(0.4);
+      speak('flower-speech', ['Hey,', 'Babe …'], flowerMouth(), 'de');
+      if (still) later(function () { burnHeadAway(); endDance(); }, 2200);
+      else later(function () { fireBeams(4); }, 900);
+    }
+
+    // Wild dancing: on top of its own dance and the wind, the flower swings
+    // faster and further and bounces on its stem. LIVELY eases in and out.
+    var lively = { from: 0, to: 0, t0: 0 };
+    function setLively(to) {
+      lively = { from: livelyAmount(performance.now()), to: to, t0: performance.now() };
+    }
+    function livelyAmount(now) {
+      var u = Math.min(1, (now - lively.t0) / 400);
+      return lively.from + (lively.to - lively.from) * u;
+    }
+    // Timers for one press's sequence, so a second press can cancel it.
+    var timers = [];
+    function later(fn, ms) { timers.push(setTimeout(fn, ms)); }
+    function cancelLater() { timers.forEach(clearTimeout); timers = []; }
+
+    // Her answer, in the manner of a comic villain's eye beams: two red
+    // beams leave her head where her eyes are and, in straight runs with
+    // hard turns, strike the flower's cheeks. They reach the flower in
+    // GROW ms, burn for HOLD, and as they fade the dance ends and the scene
+    // drains back to how it was before the press.
+    var EYES = [[522, 468], [547, 465]];        // her eyes, in scene units
+    // Power 2, after "Nope.", is the harder version: faster, thicker,
+    // hotter, a bigger glow and strike, and it burns for longer.
+    var FADE = 350;
+    var beam = { t0: null, seed: 0, cheeks: null, power: 1, grow: 450, hold: 650 };
+    function fireBeams(power) {
+      beam = { t0: performance.now(), seed: Math.random() * 100, cheeks: null, power: power,
+               grow: [0, 450, 320, 250, 300][power], hold: [0, 650, 1300, 1700, 1600][power], struck: false };
+      later(endDance, beam.grow + beam.hold);
+    }
+    // The flower's other cheeks: the two round lobes at the bottom of its
+    // head, either side of the little crack. Found from its canvas each
+    // frame, as it dances: trace the head's bottom edge, take its two
+    // lowest bulges, and aim a little inside each.
+    function findCheeks(stage) {
+      var fc = document.getElementById('flower');
+      var fw = fc.width, fh = fc.height;
+      if (!fw) return null;
+      var d = fc.getContext('2d').getImageData(0, 0, fw, fh).data;
+      var bottom = new Array(fw).fill(-1);
+      for (var x = 0; x < fw; x++)
+        for (var y = fh - 1; y >= 0; y--)
+          if (d[(y * fw + x) * 4 + 3] > 200) { bottom[x] = y; break; }
+      var span = Math.round(fw * 0.05), peaks = [];
+      for (x = span; x < fw - span; x++) {
+        if (bottom[x] < 0) continue;
+        var top = true;
+        for (var k = -span; k <= span && top; k++) if (bottom[x + k] > bottom[x]) top = false;
+        if (top && !peaks.some(function (p) { return Math.abs(p[0] - x) < span * 2; }))
+          peaks.push([x, bottom[x]]);
+      }
+      if (peaks.length < 2) return null;
+      peaks.sort(function (a, b) { return b[1] - a[1]; });     // lowest first
+      var two = [peaks[0]];
+      for (k = 1; k < peaks.length && two.length < 2; k++)
+        if (Math.abs(peaks[k][0] - peaks[0][0]) > fw * 0.1) two.push(peaks[k]);
+      if (two.length < 2) return null;
+      two.sort(function (a, b) { return a[0] - b[0]; });       // left, right
+      var toScene = 1080 / stage.clientWidth, cssPerPx = fc.clientWidth / fw;
+      return two.map(function (p) {
+        var py = p[1] - fh * 0.06;                               // inside the cheek
+        return [(fc.offsetLeft + p[0] * cssPerPx) * toScene, (fc.offsetTop + py * cssPerPx) * toScene];
+      });
+    }
+    // Each beam runs in straight lines with hard turns, the two parallel:
+    // up and right out of her eyes, a sharp turn back, another sharp turn,
+    // then straight into the cheek. ZIG gives the corners as fractions
+    // along the line from eye to cheek and across it.
+    // (measured from the sketch of how they should run).
+    var ZIG = [[0, 0], [0.28, 0.22], [0.40, -0.13], [0.67, 0.05], [1, 0]];
+    function drawBeams(ctx, k, now, stage) {
+      var el = now - beam.t0, GROW = beam.grow, HOLD = beam.hold;
+      if (beam.power === 4) {
+        if (el > GROW + HOLD + FADE) { beam.t0 = null; return; }
+        return drawUltimate(ctx, k, now, stage, el);
+      }
+      var P = [0, 1, 1.9, 2.6][beam.power];      // how much harder
+      if (el > GROW + HOLD + FADE) { beam.t0 = null; return; }
+      var cheeks = findCheeks(stage);
+      if (cheeks) beam.cheeks = cheeks;
+      if (!beam.cheeks) return;
+      var reach = easeInOut(Math.min(1, el / GROW));
+      // The hardest beams burn two holes where they strike, and shake the scene.
+      if (beam.power === 3 && el >= GROW && !beam.struck) {
+        beam.struck = true;
+        burn(beam.cheeks, stage);
+        if (!still) stage.animate([
+          { transform: 'translate(0, 0)' }, { transform: 'translate(-4px, 2px)' },
+          { transform: 'translate(3px, -3px)' }, { transform: 'translate(-2px, 1px)' },
+          { transform: 'translate(0, 0)' }], { duration: 320 });
+      }
+      var alpha = el < GROW + HOLD ? 1 : 1 - (el - GROW - HOLD) / FADE;
+      ctx.setTransform(k, 0, 0, k, 0, 0);
+      ctx.lineCap = 'butt'; ctx.lineJoin = 'miter'; ctx.miterLimit = 8;
+      var flick = 1 + (Math.random() - 0.5) * 0.2 * P;
+      EYES.forEach(function (S, b) {
+        var E = beam.cheeks[b];
+        var ux = E[0] - S[0], uy = E[1] - S[1];
+        var nx = -uy, ny = ux;                  // across: to the right of the line
+        var corners = ZIG.map(function (z) {
+          return [S[0] + ux * z[0] + nx * z[1], S[1] + uy * z[0] + ny * z[1]];
+        });
+        // Reveal the beam along its length as it travels.
+        var lens = [0], total = 0;
+        for (var i = 1; i < corners.length; i++) {
+          total += Math.hypot(corners[i][0] - corners[i-1][0], corners[i][1] - corners[i-1][1]);
+          lens.push(total);
+        }
+        var want = total * reach, pts = [corners[0]];
+        for (i = 1; i < corners.length; i++) {
+          if (lens[i] <= want) { pts.push(corners[i]); continue; }
+          var f = (want - lens[i-1]) / (lens[i] - lens[i-1]);
+          pts.push([corners[i-1][0] + (corners[i][0] - corners[i-1][0]) * f,
+                    corners[i-1][1] + (corners[i][1] - corners[i-1][1]) * f]);
+          break;
+        }
+        var line = function () {
+          ctx.beginPath(); ctx.moveTo(pts[0][0], pts[0][1]);
+          for (var j = 1; j < pts.length; j++) ctx.lineTo(pts[j][0], pts[j][1]);
+          ctx.stroke();
+        };
+        ctx.globalAlpha = alpha * flick;
+        ctx.shadowColor = 'rgba(230, 30, 20, 0.8)';
+        ctx.shadowBlur = 10 * k * P * P;
+        ctx.strokeStyle = '#E8241C'; ctx.lineWidth = 4.5 * P; line();   // the red beam
+        ctx.shadowBlur = 0;
+        ctx.strokeStyle = P > 2 ? '#FFFFFF' : P > 1 ? '#FFE6DC' : '#FFC2B5';
+        ctx.lineWidth = 0.8 * P * P; line();                            // its hot centre
+        var tip = pts[pts.length - 1];
+        glow(ctx, S, 8 * P, alpha * 0.8);
+        if (el > GROW) {
+          var hit = Math.min(1, (el - GROW) / 380);
+          glow(ctx, E, (8 + 30 * easeOut(hit)) * P, alpha * (1 - hit));
+          glow(ctx, E, 6 * flick * P, alpha);
+        } else {
+          glow(ctx, tip, 6 * P, alpha);
+        }
+        ctx.globalAlpha = 1;
+      });
+    }
+    // The ultimate beam: one beam from between her eyes along the same hard
+    // turns, swelling to the width of the flower's head. While it holds,
+    // the head chars and then crumbles to ash.
+    var headBurn = 0, headGone = false, ash = [];
+    function drawUltimate(ctx, k, now, stage, el) {
+      var GROW = beam.grow, HOLD = beam.hold;
+      var fc = document.getElementById('flower'), toScene = 1080 / stage.clientWidth;
+      if (!headGone) {
+        beam.centre = [(fc.offsetLeft + fc.clientWidth * 0.5) * toScene,
+                       (fc.offsetTop + fc.clientHeight * 0.55) * toScene];
+        beam.headW = fc.clientWidth * toScene * 0.62;
+      }
+      var C = beam.centre, HW = beam.headW;
+      var reach = easeInOut(Math.min(1, el / GROW));
+      var alpha = el < GROW + HOLD ? 1 : 1 - (el - GROW - HOLD) / FADE;
+      headBurn = Math.max(0, Math.min(1, (el - GROW) / (HOLD * 0.8)));
+      if (el >= GROW && !beam.struck) {
+        beam.struck = true;
+        if (!still) stage.animate([
+          { transform: 'translate(0, 0)' }, { transform: 'translate(-7px, 3px)' },
+          { transform: 'translate(6px, -5px)' }, { transform: 'translate(-5px, 4px)' },
+          { transform: 'translate(4px, -2px)' }, { transform: 'translate(-2px, 1px)' },
+          { transform: 'translate(0, 0)' }], { duration: 700 });
+      }
+      if (headBurn >= 1 && !headGone) burnHeadAway(C, HW);
+      var S = [(EYES[0][0] + EYES[1][0]) / 2, (EYES[0][1] + EYES[1][1]) / 2];
+      var ux = C[0] - S[0], uy = C[1] - S[1], nx = -uy, ny = ux;
+      var corners = ZIG.map(function (z) {
+        return [S[0] + ux * z[0] + nx * z[1], S[1] + uy * z[0] + ny * z[1]];
+      });
+      // Sample the path finely, with how far along it each sample is.
+      var pts = [], i, j, total = 0, lens = [0];
+      for (i = 1; i < corners.length; i++) {
+        total += Math.hypot(corners[i][0] - corners[i-1][0], corners[i][1] - corners[i-1][1]);
+        lens.push(total);
+      }
+      var want = total * reach;
+      for (i = 1; i < corners.length; i++) {
+        var a = corners[i-1], b = corners[i], n = 24;
+        for (j = 0; j <= n; j++) {
+          var d = lens[i-1] + (lens[i] - lens[i-1]) * j / n;
+          if (d > want) break;
+          pts.push([a[0] + (b[0] - a[0]) * j / n, a[1] + (b[1] - a[1]) * j / n, d / total]);
+        }
+      }
+      if (pts.length < 2) return;
+      // Slim through the turns, so they still read, then swelling on the
+      // last run to the full width of the head.
+      var width = function (t) {
+        var u = Math.max(0, Math.min(1, (t - 0.62) / 0.3));
+        return 16 + (HW - 16) * u * u * (3 - 2 * u);
+      };
+      var flick = 0.94 + Math.random() * 0.12;
+      ctx.setTransform(k, 0, 0, k, 0, 0);
+      ctx.lineCap = 'round';
+      ctx.globalAlpha = alpha;
+      [['rgba(232, 36, 28, 0.32)', 1.35], ['#E8241C', 1], ['#FF8A6B', 0.68], ['#FFF6F0', 0.42]]
+        .forEach(function (layer) {
+          ctx.strokeStyle = layer[0];
+          for (var q = 1; q < pts.length; q++) {
+            ctx.lineWidth = width(pts[q][2]) * layer[1] * flick;
+            ctx.beginPath(); ctx.moveTo(pts[q-1][0], pts[q-1][1]);
+            ctx.lineTo(pts[q][0], pts[q][1]); ctx.stroke();
+          }
+        });
+      if (el > GROW) glow(ctx, C, HW * 0.75 * flick, alpha * 0.9);
+      ctx.globalAlpha = 1;
+    }
+    // The head is gone: hide it, scatter its ash, drop its marks.
+    function burnHeadAway(C, HW) {
+      headGone = true; headBurn = 1; marks = null;
+      heart = { pending: true, after: performance.now() + 2500, t0: null };
+      var fc = document.getElementById('flower');
+      fc.style.visibility = 'hidden';
+      fc.setAttribute('aria-label', 'Where the flower\u2019s head was, burnt away');
+      if (!C) return;
+      var t = performance.now();
+      for (var i = 0; i < 90; i++) {
+        var r = Math.sqrt(Math.random()) * HW * 0.5, a = Math.random() * Math.PI * 2;
+        ash.push({ x: C[0] + Math.cos(a) * r, y: C[1] + Math.sin(a) * r * 0.9,
+                   vx: (Math.random() - 0.5) * 40, vy: -30 - Math.random() * 70,
+                   size: 1.5 + Math.random() * 3.5, ember: Math.random() < 0.3,
+                   t0: t, life: 1200 + Math.random() * 1200 });
+      }
+    }
+    function drawAsh(ctx, k, now) {
+      if (!ash.length) return;
+      ctx.setTransform(k, 0, 0, k, 0, 0);
+      ash = ash.filter(function (p) {
+        var age = (now - p.t0) / p.life;
+        if (age >= 1) return false;
+        var s = (now - p.t0) / 1000;
+        ctx.globalAlpha = 1 - age;
+        ctx.fillStyle = p.ember ? 'rgb(255, ' + (110 + 60 * (1 - age) | 0) + ', 40)' : '#2B2420';
+        ctx.fillRect(p.x + p.vx * s, p.y + p.vy * s - 20 * s * s, p.size, p.size);
+        return true;
+      });
+      ctx.globalAlpha = 1;
+    }
+
+    // The finish: once the flower's head is gone, the next time the dog
+    // leans onto her (frame 42 of the scene's loop, 1.8 s in, read from
+    // girl-and-dog.riv), a little red heart rises over its head, stays a
+    // moment, and floats off.
+    var LEAN = (42 - 15) / 15;              // s into the loop
+    var DOG = [642, 560];                   // above the leaning dog's head
+    var HEART = new Path2D('M0 6 C -2 2, -11 -1, -11 -7 C -11 -12, -5 -14, 0 -9 ' +
+                           'C 5 -14, 11 -12, 11 -7 C 11 -1, 2 2, 0 6 Z');
+    var heart = { pending: false, after: 0, t0: null };
+    var dogStays = '';
+    function drawHeart(ctx, k, now) {
+      var el = now - heart.t0, IN = 380, STAY = 1800, OUT = 600;
+      if (el > IN + STAY + OUT) { heart.t0 = null; return; }
+      var s, a = 1, rise = 0;
+      if (el < IN) {                                  // pops up, a touch past full
+        var u = el / IN;
+        s = u < 0.7 ? 1.15 * easeOut(u / 0.7) : 1.15 - 0.15 * ((u - 0.7) / 0.3);
+        rise = 8 * easeOut(u);
+      } else if (el < IN + STAY) {
+        s = 1; rise = 8 + 2 * Math.sin((el - IN) / 260);   // breathes
+      } else {                                        // floats off as it fades
+        var v = (el - IN - STAY) / OUT;
+        s = 1 - 0.2 * v; a = 1 - v; rise = 8 + 14 * easeOut(v);
+      }
+      ctx.setTransform(k, 0, 0, k, 0, 0);
+      ctx.translate(DOG[0], DOG[1] - rise);
+      ctx.scale(s * 1.25, s * 1.25);
+      ctx.globalAlpha = a;
+      ctx.fillStyle = '#E0483E'; ctx.fill(HEART);
+      ctx.strokeStyle = INK; ctx.lineWidth = LINE; ctx.lineJoin = 'round';
+      ctx.stroke(HEART);
+      ctx.globalAlpha = 1;
+    }
+
+    // Things drawn on the flower's head: the tanga (round 3) and the marks
+    // the hardest beams leave. Both are drawn in scene units on a scratch
+    // canvas and then cut to the head's own outline, so nothing hangs off it.
+    var PINK = '#D6336C';
+    var tanga = { from: 0, to: 0, t0: 0 };
+    function setTanga(to) {
+      tanga = { from: tangaAmount(performance.now()), to: to, t0: performance.now() };
+    }
+    function tangaAmount(now) {
+      var u = Math.min(1, (now - tanga.t0) / 300);
+      return tanga.from + (tanga.to - tanga.from) * u;
+    }
+    // The marks are kept as fractions of the flower's canvas, so they move
+    // with it; they stay once made.
+    var marks = null, burnt = 0;
+    function burn(cheeks, stage) {
+      var fc = document.getElementById('flower'), toScene = 1080 / stage.clientWidth;
+      marks = cheeks.map(function (c) {
+        return [(c[0] / toScene - fc.offsetLeft) / fc.clientWidth,
+                (c[1] / toScene - fc.offsetTop) / fc.clientHeight];
+      });
+      burnt = performance.now();
+    }
+    var scratch = document.createElement('canvas');
+    function drawOnFlower(ctx, w, now, stage) {
+      var on = tangaAmount(now);
+      var fc = document.getElementById('flower');
+      if (!headGone) fc.style.opacity = headBurn > 0.8 ? String(1 - (headBurn - 0.8) / 0.2) : '';
+      if (headGone || (on <= 0 && !marks && headBurn <= 0)) return;
+      if (scratch.width !== w) { scratch.width = w; scratch.height = w; }
+      var sx = scratch.getContext('2d'), k = w / 1080, toScene = 1080 / stage.clientWidth;
+      sx.setTransform(1, 0, 0, 1, 0, 0);
+      sx.globalCompositeOperation = 'source-over';
+      sx.clearRect(0, 0, w, w);
+      sx.setTransform(k, 0, 0, k, 0, 0);
+      if (marks) {
+        var age = (now - burnt) / 1000;
+        marks.forEach(function (m) {
+          var x = (fc.offsetLeft + m[0] * fc.clientWidth) * toScene;
+          var y = (fc.offsetTop + m[1] * fc.clientHeight) * toScene;
+          var g = sx.createRadialGradient(x, y, 0, x, y, 13);
+          g.addColorStop(0, 'rgba(20, 12, 8, 0.96)');
+          g.addColorStop(0.5, 'rgba(48, 28, 16, 0.9)');
+          g.addColorStop(0.78, 'rgba(120, 66, 30, 0.45)');
+          g.addColorStop(1, 'rgba(120, 66, 30, 0)');
+          sx.fillStyle = g;
+          sx.beginPath(); sx.arc(x, y, 13, 0, Math.PI * 2); sx.fill();
+          if (age < 4) {                               // embers, cooling
+            var a = (1 - age / 4) * (0.7 + Math.random() * 0.3);
+            sx.strokeStyle = 'rgba(255, 120, 30, ' + a + ')';
+            sx.lineWidth = 1.6;
+            sx.beginPath(); sx.arc(x, y, 7.5, 0, Math.PI * 2); sx.stroke();
+          }
+        });
+      }
+      if (on > 0) {
+        var c = findCheeks(stage);
+        if (c) {
+          var fh = fc.clientHeight * toScene;
+          var mx = (c[0][0] + c[1][0]) / 2, my = (c[0][1] + c[1][1]) / 2;
+          var hw = Math.abs(c[1][0] - c[0][0]) * 1.9;
+          var wy = my - fh * 0.1, crack = my + fh * 0.06;
+          sx.globalAlpha = on;
+          sx.lineCap = 'round'; sx.lineJoin = 'round';
+          var band = function () {
+            sx.beginPath();
+            sx.moveTo(mx - hw, wy - 10);
+            sx.quadraticCurveTo(mx, wy + 14, mx + hw, wy - 10);
+            sx.stroke();
+          };
+          sx.strokeStyle = INK; sx.lineWidth = 4.6; band();      // waistband
+          sx.strokeStyle = PINK; sx.lineWidth = 3.2; band();
+          sx.beginPath();                                       // the string
+          sx.moveTo(mx, wy + 20); sx.quadraticCurveTo(mx + 2, (wy + crack) / 2, mx, crack);
+          sx.strokeStyle = INK; sx.lineWidth = 2.6; sx.stroke();
+          sx.strokeStyle = PINK; sx.lineWidth = 1.5; sx.stroke();
+          sx.beginPath();                                       // the little triangle
+          sx.moveTo(mx - 11, wy + 1); sx.lineTo(mx + 11, wy + 1); sx.lineTo(mx, wy + 22);
+          sx.closePath();
+          sx.fillStyle = PINK; sx.fill();
+          sx.strokeStyle = INK; sx.lineWidth = LINE; sx.stroke();
+          sx.globalAlpha = 1;
+        }
+      }
+      if (headBurn > 0) {                               // charring, from the middle out
+        var cx = (fc.offsetLeft + fc.clientWidth * 0.5) * toScene;
+        var cy = (fc.offsetTop + fc.clientHeight * 0.55) * toScene;
+        var R = fc.clientWidth * toScene * 0.55;
+        var ch = sx.createRadialGradient(cx, cy, 0, cx, cy, R);
+        ch.addColorStop(0, 'rgba(24, 16, 12, ' + Math.min(1, headBurn * 1.6) + ')');
+        ch.addColorStop(Math.min(0.99, headBurn), 'rgba(40, 24, 14, ' + Math.min(1, headBurn * 1.3) + ')');
+        ch.addColorStop(1, 'rgba(90, 50, 24, ' + headBurn * 0.5 + ')');
+        sx.fillStyle = ch;
+        sx.fillRect(cx - R, cy - R, R * 2, R * 2);
+        for (var e = 0; e < 40 * headBurn; e++) {        // embers
+          sx.fillStyle = 'rgba(255, ' + (90 + Math.random() * 90 | 0) + ', 30, ' + (0.5 + Math.random() * 0.5) + ')';
+          sx.fillRect(cx + (Math.random() - 0.5) * R * 1.6, cy + (Math.random() - 0.5) * R * 1.6, 2.2, 2.2);
+        }
+      }
+      // Cut to the head's outline, then lay it over the flower.
+      sx.setTransform(1, 0, 0, 1, 0, 0);
+      sx.globalCompositeOperation = 'destination-in';
+      var b = w / stage.clientWidth;
+      sx.drawImage(fc, fc.offsetLeft * b, fc.offsetTop * b, fc.clientWidth * b, fc.clientHeight * b);
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      ctx.drawImage(scratch, 0, 0);
+    }
+
+    // Her face looks away from us, so her head stands in front of the
+    // beams: wherever the scene is drawn inside HEAD_BOX (her hair, head
+    // and neck, in scene units), the beams are cut away.
+    var HEAD_BOX = [462, 388, 602, 498];
+    function behindHer(ctx, scene, w) {
+      var s = scene.width / 1080, b = w / 1080, H = HEAD_BOX;
+      ctx.save();
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      ctx.globalCompositeOperation = 'destination-out';
+      ctx.drawImage(scene, H[0] * s, H[1] * s, (H[2] - H[0]) * s, (H[3] - H[1]) * s,
+                           H[0] * b, H[1] * b, (H[2] - H[0]) * b, (H[3] - H[1]) * b);
+      ctx.restore();
+    }
+    function glow(ctx, P, r, a) {
+      var g = ctx.createRadialGradient(P[0], P[1], 0, P[0], P[1], r);
+      g.addColorStop(0, 'rgba(255, 246, 214, ' + a + ')');
+      g.addColorStop(0.35, 'rgba(255, 110, 30, ' + a * 0.8 + ')');
+      g.addColorStop(1, 'rgba(214, 30, 18, 0)');
+      ctx.fillStyle = g;
+      ctx.beginPath(); ctx.arc(P[0], P[1], r, 0, Math.PI * 2); ctx.fill();
     }
     function sway() {
       var scene = document.getElementById('girl-and-dog');
       var sceneCtx = scene.getContext('2d');
       var canvas = document.getElementById('stem');
       var ctx = canvas.getContext('2d');
+      var beamCanvas = document.getElementById('beams');
+      var beamCtx = beamCanvas.getContext('2d');
       var head = document.getElementById('flower');
       var stage = head.parentNode;
-      var start = performance.now();
+      var start = performance.now(), lastNow = start;
       // A point on the stem's curve, t from 0 at the ground to 1 at the head.
       function at(p, t) {
         var u = 1 - t;
@@ -303,8 +773,45 @@
           var f = ((now - start) / 1000 * FPS) % LOOP, i = Math.floor(f);
           dx = (WIND[i] + (WIND[i + 1] - WIND[i]) * (f - i)) * GAIN;
         }
+        var wild = livelyAmount(now), bob = 0;
+        if (wild > 0) {
+          dx += wild * (26 * Math.sin(now * 0.0105) + 9 * Math.sin(now * 0.031));
+          bob = wild * 16 * Math.abs(Math.sin(now * 0.021));   // scene units, upward
+        }
         var w = Math.round(stage.clientWidth * (window.devicePixelRatio || 1));
         if (canvas.width !== w) { canvas.width = w; canvas.height = w; }
+        if (beamCanvas.width !== w) { beamCanvas.width = w; beamCanvas.height = w; }
+        beamCtx.setTransform(1, 0, 0, 1, 0, 0);
+        beamCtx.clearRect(0, 0, w, w);
+        drawOnFlower(beamCtx, w, now, stage);
+        if (beam.t0 !== null) {
+          drawBeams(beamCtx, w / 1080, now, stage);
+          behindHer(beamCtx, scene, w);
+        }
+        drawAsh(beamCtx, w / 1080, now);
+        if (heart.pending && now > heart.after) {
+          // The next lean: the loop's clock crossing LEAN this frame (with
+          // less motion asked for nothing moves, so it simply shows).
+          var loopS = LOOP / FPS, ph = ((now - start) / 1000) % loopS;
+          var was = ((lastNow - start) / 1000) % loopS;
+          if (still || (was < LEAN && ph >= LEAN) || (was > ph && ph >= LEAN)) {
+            heart.pending = false; heart.t0 = now; dogStays = 'next loop';
+          }
+        }
+        // And from the next time the loop starts over, the dog stays leaned
+        // onto her for good: the scene switches to its copy of the loop in
+        // which the dog holds still (GirlAndDogLeaning in girl-and-dog.riv).
+        // The dog is leaned at the loop's end too, so nothing jumps.
+        if (dogStays === 'next loop' && !still) {
+          var loopLen = LOOP / FPS;
+          if (((now - start) / 1000) % loopLen < ((lastNow - start) / 1000) % loopLen) {
+            r.stop();
+            r.play('GirlAndDogLeaning');
+            dogStays = 'for good';
+          }
+        }
+        if (heart.t0 !== null) drawHeart(beamCtx, w / 1080, now);
+        lastNow = now;
         var k = w / 1080;
         // The ground end stays put; the higher up the stem, the further it goes.
         var p = [[732, 681], [706 + dx * 0.15, 590], [776 + dx * 0.7, 420], [731 + dx, 235]];
@@ -316,20 +823,35 @@
         ctx.save();
         ctx.beginPath(); ctx.rect(0, 0, 1080, bushTop()); ctx.clip();
         ctx.beginPath(); ctx.moveTo(p[0][0], p[0][1]);
-        ctx.bezierCurveTo(p[1][0], p[1][1], p[2][0], p[2][1], p[3][0], p[3][1]);
-        ctx.stroke();
+        if (!headGone) {
+          ctx.bezierCurveTo(p[1][0], p[1][1], p[2][0], p[2][1], p[3][0], p[3][1]);
+          ctx.stroke();
+        } else {
+          // No head: the stem stops where the head sat, with a burnt tip.
+          for (var q = 1; q <= 40; q++) { var sp = at(p, 0.82 * q / 40); ctx.lineTo(sp[0], sp[1]); }
+          ctx.stroke();
+          var tip = at(p, 0.82);
+          ctx.fillStyle = '#2B2420';
+          ctx.beginPath(); ctx.arc(tip[0], tip[1], 2.2, 0, Math.PI * 2); ctx.fill();
+        }
         ctx.restore();
         LEAVES.forEach(function (leaf) {
           var q = at(p, leaf.t);
           ctx.setTransform(k, 0, 0, k, 0, 0);
           ctx.translate(q[0], q[1]);
           ctx.rotate(dx * leaf.t * 0.6 * Math.PI / 180);
+          var fill = leafAmount(now);
+          if (fill > 0) {
+            ctx.globalAlpha = fill; ctx.fillStyle = LEAF;
+            ctx.fill(leaf.path); ctx.globalAlpha = 1;
+          }
           ctx.stroke(leaf.path);
         });
         // Moved by its position, not a transform: a transform resamples the
         // canvas and breaks up its hairline outline.
         var px = dx * stage.clientWidth / 1080;
         head.style.left = 'calc(51.2% + ' + px.toFixed(2) + 'px)';
+        head.style.top = (-bob * stage.clientWidth / 1080).toFixed(2) + 'px';
         requestAnimationFrame(frame);
       })(start);
     }
@@ -348,13 +870,35 @@
     // answers it; when the dance ends, the colour drains away again. The
     // two colour animations live in girl-and-dog.riv and play alongside
     // its own.
+    // Whichever ends the dance, a second press or the beams, everything
+    // goes back as it was before the first press.
+    var dancing = false, round = 0;
+    function endDance() {
+      var end = (f.stateMachineInputs('State Machine 1') || [])
+        .filter(function (i) { return i.name === 'End'; })[0];
+      if (dancing && end) end.fire();
+    }
     f.on(rive.EventType.StateChange, function (e) {
       var states = e.data || [];
       if (states.indexOf('DanceStart') !== -1) {
+        dancing = true;
         r.play('ColourIn');
-        setTimeout(say, 500);
+        setLeaves(1);
+        round = round % 4 + 1;
+        later([roundOne, roundTwo, roundThree, roundFour][round - 1], 500);
       }
-      if (states.indexOf('DanceEnd') !== -1) r.play('ColourOut');
+      if (states.indexOf('DanceEnd') !== -1) {
+        dancing = false;
+        cancelLater();
+        // Pressed again while the beams burn: they go straight to fading.
+        if (beam.t0 !== null && performance.now() - beam.t0 < beam.grow + beam.hold)
+          beam.t0 = performance.now() - beam.grow - beam.hold;
+        setLively(0);
+        setTanga(0);
+        r.play('ColourOut');
+        setLeaves(0);
+        hideWords();
+      }
     });
     // With less motion asked for, nothing runs until the head is pressed:
     // this capture listener starts the machine just before Rive sees the press.
