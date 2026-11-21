@@ -32,11 +32,20 @@
   /* The canvas keeps the artboard's shape; the script sizes its pixels. */
   .scene { margin: 2.4rem 0 0; }
   .stage { position: relative; max-width: 30rem; margin: 0 auto; }
-  .scene canvas { display: block; width: 100%; aspect-ratio: 1 / 1;
+  #girl-and-dog { display: block; width: 100%; aspect-ratio: 1 / 1;
                   border-radius: 16px; }
-  /* The credit the licence asks for sits behind this button, in the
-     artboard's corner, so the drawing stands on its own until asked. */
-  /* Only faint text is drawn; the transparent 44px box around it keeps it
+  /* The flower is laid over the scene in fractions of its width, so it
+     stays planted beside the dog at any size. The stem and leaves are
+     drawn on a canvas in the scene's own 1080-unit space, the way Rive
+     draws the scene, so their line matches the bushes'. */
+  .stem { position: absolute; inset: 0; width: 100%; height: 100%;
+          pointer-events: none; }
+  #flower { position: absolute; left: 51.2%; top: 0; width: 33%;
+            aspect-ratio: 1 / 1; cursor: pointer;
+            -webkit-tap-highlight-color: transparent; }
+  /* The credit the licences ask for sits behind this button, in the
+     artboard's corner, so the drawing stands on its own until asked.
+     Only faint text is drawn; the transparent 44px box around it keeps it
      easy to tap without adding anything to the picture. */
   .info { position: absolute; right: 0; bottom: 0;
           width: 2.75rem; height: 2.75rem; padding: 0; border: 0;
@@ -78,12 +87,18 @@
       <div class="stage">
         <canvas id="girl-and-dog" width="480" height="480"
           role="img" aria-label="An animated line drawing of a girl sitting beside her dog"></canvas>
+        <canvas class="stem" id="stem" aria-hidden="true"></canvas>
+        <canvas id="flower" width="160" height="160"
+          role="img" aria-label="A flower whose head dances when you press it"></canvas>
         <button class="info" type="button" aria-expanded="false"
           aria-controls="credit" aria-label="Animation credit and licence">CC</button>
       </div>
       <figcaption id="credit" hidden>“<a href="https://rive.app/marketplace/3968-8274-girl-and-dog/">Girl and dog</a>”
+      and “<a href="https://rive.app/marketplace/3642-7617-cheek-mark/">Cheek Mark</a>”
       by Lala, made with Rive, used under
-      <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>.</figcaption>
+      <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>.
+      Cheek Mark is changed here into the flower’s head: its tick and legs
+      are hidden and it is recoloured.</figcaption>
     </figure>
   </div>
 
@@ -136,10 +151,116 @@
       stateMachine: 'State Machine 1',
       autoplay: !still,
       layout: new rive.Layout({ fit: rive.Fit.Contain }),
-      onLoad: function () { r.resizeDrawingSurfaceToCanvas(); }
+      onLoad: function () {
+        r.resizeDrawingSurfaceToCanvas();
+        sway();
+      }
     });
+    // The flower sways in the scene's wind. WIND is how far the tip of the
+    // bush at the stem's foot moves sideways, in scene units, on each frame
+    // of the scene's loop (frames 15-101 at 15 fps), read from
+    // girl-and-dog.riv: a gust to the left, then a few settling wobbles.
+    // The taller flower takes the same wind a little further.
+    var WIND = [0.0,1.2,2.4,3.6,4.8,2.3,-0.2,-2.6,-5.1,-3.4,-1.6,0.0,-3.0,
+      -6.1,-9.1,-12.2,-15.2,-18.3,-17.0,-15.7,-14.4,-13.2,-11.9,-10.5,-9.3,
+      -8.0,-6.7,-5.4,-4.2,-2.9,-1.6,-0.3,1.0,2.2,3.5,4.8,3.7,2.6,1.5,0.4,
+      -0.7,-1.8,-2.9,-4.0,-5.1,-4.0,-3.0,-2.0,-1.0,0.0,0.6,1.1,1.6,2.1,2.7,
+      3.2,3.7,4.3,4.8,3.7,2.6,1.5,0.4,-0.7,-1.8,-2.9,-4.0,-5.1,-4.4,-3.6,
+      -2.9,-2.1,-1.4,-0.7,0,0,0,0,0,0,0,0,0,0,0,0,0];
+    var GAIN = 1.6, FPS = 15, LOOP = WIND.length - 1;
+    // The stem and leaves, in scene units. The stem rises from the ground
+    // behind the bush at its foot; the leaves are drawn from their base.
+    var LINE = 0.65;      // the scene's own line: about 0.6 device px at 480 px
+    var CREAM = '#FFDFB9';
+    var LEAVES = [
+      { t: 0.25, path: new Path2D('M0 0 C -31 -21, -63 -66, -67 -114 C -31 -98, -5 -56, 0 0') },
+      { t: 0.42, path: new Path2D('M0 0 C 29 -30, 63 -90, 67 -158 C 37 -130, 5 -70, 0 0') }
+    ];
+    function sway() {
+      var scene = document.getElementById('girl-and-dog');
+      var sceneCtx = scene.getContext('2d');
+      var canvas = document.getElementById('stem');
+      var ctx = canvas.getContext('2d');
+      var head = document.getElementById('flower');
+      var stage = head.parentNode;
+      var start = performance.now();
+      // A point on the stem's curve, t from 0 at the ground to 1 at the head.
+      function at(p, t) {
+        var u = 1 - t;
+        return [0, 1].map(function (k) {
+          return u*u*u*p[0][k] + 3*u*u*t*p[1][k] + 3*u*t*t*p[2][k] + t*t*t*p[3][k];
+        });
+      }
+      // Where the bush's outline crosses the stem, in scene units: the first
+      // lit pixel looking up the scene's column from just above the ground.
+      // The bush has no fill, so the stem is cut off there instead of
+      // showing through it; read every frame, it follows the bush's sway.
+      function bushTop() {
+        var k = scene.width / 1080, x = Math.round(730 * k);
+        var y0 = Math.round(560 * k), y1 = Math.round(676 * k);
+        var d = sceneCtx.getImageData(x, y0, 1, y1 - y0).data;
+        for (var j = d.length / 4 - 1; j >= 0; j--) {
+          if (d[j * 4] > 90) return (y0 + j) / k;
+        }
+        return 640;
+      }
+      (function frame(now) {
+        var dx = 0;
+        if (!still) {
+          var f = ((now - start) / 1000 * FPS) % LOOP, i = Math.floor(f);
+          dx = (WIND[i] + (WIND[i + 1] - WIND[i]) * (f - i)) * GAIN;
+        }
+        var w = Math.round(stage.clientWidth * (window.devicePixelRatio || 1));
+        if (canvas.width !== w) { canvas.width = w; canvas.height = w; }
+        var k = w / 1080;
+        // The ground end stays put; the higher up the stem, the further it goes.
+        var p = [[732, 681], [706 + dx * 0.15, 590], [776 + dx * 0.7, 420], [731 + dx, 235]];
+        ctx.setTransform(1, 0, 0, 1, 0, 0);
+        ctx.clearRect(0, 0, w, w);
+        ctx.setTransform(k, 0, 0, k, 0, 0);
+        ctx.strokeStyle = CREAM; ctx.lineWidth = LINE;
+        ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+        ctx.save();
+        ctx.beginPath(); ctx.rect(0, 0, 1080, bushTop()); ctx.clip();
+        ctx.beginPath(); ctx.moveTo(p[0][0], p[0][1]);
+        ctx.bezierCurveTo(p[1][0], p[1][1], p[2][0], p[2][1], p[3][0], p[3][1]);
+        ctx.stroke();
+        ctx.restore();
+        LEAVES.forEach(function (leaf) {
+          var q = at(p, leaf.t);
+          ctx.setTransform(k, 0, 0, k, 0, 0);
+          ctx.translate(q[0], q[1]);
+          ctx.rotate(dx * leaf.t * 0.6 * Math.PI / 180);
+          ctx.stroke(leaf.path);
+        });
+        // Moved by its position, not a transform: a transform resamples the
+        // canvas and breaks up its hairline outline.
+        var px = dx * stage.clientWidth / 1080;
+        head.style.left = 'calc(51.2% + ' + px.toFixed(2) + 'px)';
+        requestAnimationFrame(frame);
+      })(start);
+    }
+    // The flower's head rests until pressed; its own state machine then
+    // starts a dance, and the next press ends it.
+    var flowerCanvas = document.getElementById('flower');
+    var f = new rive.Rive({
+      src: '/assets/about/flower.riv',
+      canvas: flowerCanvas,
+      stateMachine: 'State Machine 1',
+      autoplay: !still,
+      layout: new rive.Layout({ fit: rive.Fit.Contain }),
+      onLoad: function () { f.resizeDrawingSurfaceToCanvas(); }
+    });
+    // With less motion asked for, nothing runs until the head is pressed:
+    // this capture listener starts the machine just before Rive sees the press.
+    if (still) {
+      flowerCanvas.parentNode.addEventListener('pointerdown', function (e) {
+        if (e.target === flowerCanvas && !f.isPlaying) f.play();
+      }, true);
+    }
     window.addEventListener('resize', function () {
       r.resizeDrawingSurfaceToCanvas();
+      f.resizeDrawingSurfaceToCanvas();
     });
   })();
 </script>
