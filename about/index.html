@@ -49,13 +49,13 @@
      easy to tap without adding anything to the picture. */
   .info { position: absolute; right: 0; bottom: 0;
           width: 2.75rem; height: 2.75rem; padding: 0; border: 0;
-          background: none; color: var(--paper); opacity: 0.3;
+          background: none; color: var(--ink); opacity: 0.3;
           font-family: inherit; font-size: 0.6rem; font-weight: 600;
           line-height: 1; letter-spacing: 0.06em;
           cursor: pointer; transition: opacity 0.15s; }
   .info:hover, .info:focus-visible, .info[aria-expanded="true"] {
     opacity: 0.75; }
-  .info:focus-visible { outline: 2px solid var(--paper); outline-offset: 2px; }
+  .info:focus-visible { outline: 2px solid var(--teal); outline-offset: 2px; }
   .scene figcaption { max-width: 30rem; margin: 0.6rem auto 0;
                       text-align: center; font-size: 0.8rem;
                       color: var(--muted); }
@@ -97,8 +97,8 @@
       and “<a href="https://rive.app/marketplace/3642-7617-cheek-mark/">Cheek Mark</a>”
       by Lala, made with Rive, used under
       <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>.
-      Cheek Mark is changed here into the flower’s head: its tick and legs
-      are hidden and it is recoloured.</figcaption>
+      Both are recoloured for this page, and Cheek Mark is changed into the
+      flower’s head: its tick and legs are hidden.</figcaption>
     </figure>
   </div>
 
@@ -171,7 +171,7 @@
     // The stem and leaves, in scene units. The stem rises from the ground
     // behind the bush at its foot; the leaves are drawn from their base.
     var LINE = 0.65;      // the scene's own line: about 0.6 device px at 480 px
-    var CREAM = '#FFDFB9';
+    var INK = '#222D46';  // the scene's line colour, recoloured for the light page
     var LEAVES = [
       { t: 0.25, path: new Path2D('M0 0 C -31 -21, -63 -66, -67 -114 C -31 -98, -5 -56, 0 0') },
       { t: 0.42, path: new Path2D('M0 0 C 29 -30, 63 -90, 67 -158 C 37 -130, 5 -70, 0 0') }
@@ -192,17 +192,18 @@
         });
       }
       // Where the bush's outline crosses the stem, in scene units: the first
-      // lit pixel looking up the scene's column from just above the ground.
+      // dark pixel looking up the scene's column from just above the ground.
       // The bush has no fill, so the stem is cut off there instead of
       // showing through it; read every frame, it follows the bush's sway.
+      var last = 640;
       function bushTop() {
         var k = scene.width / 1080, x = Math.round(730 * k);
         var y0 = Math.round(560 * k), y1 = Math.round(676 * k);
         var d = sceneCtx.getImageData(x, y0, 1, y1 - y0).data;
         for (var j = d.length / 4 - 1; j >= 0; j--) {
-          if (d[j * 4] > 90) return (y0 + j) / k;
+          if (d[j * 4 + 3] > 40 && d[j * 4] < 160) return (last = (y0 + j) / k);
         }
-        return 640;
+        return last;   // a frame where the line was missed: keep the last place
       }
       (function frame(now) {
         var dx = 0;
@@ -218,7 +219,7 @@
         ctx.setTransform(1, 0, 0, 1, 0, 0);
         ctx.clearRect(0, 0, w, w);
         ctx.setTransform(k, 0, 0, k, 0, 0);
-        ctx.strokeStyle = CREAM; ctx.lineWidth = LINE;
+        ctx.strokeStyle = INK; ctx.lineWidth = LINE;
         ctx.lineCap = 'round'; ctx.lineJoin = 'round';
         ctx.save();
         ctx.beginPath(); ctx.rect(0, 0, 1080, bushTop()); ctx.clip();
